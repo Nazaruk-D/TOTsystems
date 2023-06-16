@@ -1,0 +1,13 @@
+@import '../../styles/sass/mixin';
+@import '../../styles/sass/variables';
+
+.authContainer {
+  @include flex(row, center, flex-start, wrap);
+  width: 90%;
+  height: 600px;
+  margin-top: 60px;
+  @media screen and (max-width: 1150px) {
+    @include flex(column, flex-start, center, wrap);
+    margin-top: 20px;
+  }
+}
