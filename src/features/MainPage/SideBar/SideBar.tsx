@@ -13,6 +13,7 @@ import {
 } from '@mui/material';
 import DraftsIcon from '@mui/icons-material/Drafts';
 import InboxIcon from '@mui/icons-material/Inbox';
+import ArchiveOutlinedIcon from '@mui/icons-material/ArchiveOutlined';
 import { theme } from '../../../styles/theme/theme';
 
 const SideBar = () => {
@@ -49,7 +50,7 @@ const SideBar = () => {
                         <ListItem disablePadding>
                             <ListItemButton>
                                 <ListItemIcon>
-                                    <DraftsIcon />
+                                    <ArchiveOutlinedIcon />
                                 </ListItemIcon>
                                 <ListItemText primary="Черновики" />
                             </ListItemButton>

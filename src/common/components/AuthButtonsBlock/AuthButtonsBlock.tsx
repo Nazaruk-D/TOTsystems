@@ -68,6 +68,9 @@ const AuthButtonsBlock = () => {
                 onClose={handleCloseUserMenu}
             >
                 <MenuItem onClick={homePage}>
+                    <Typography textAlign="center">Profile</Typography>
+                </MenuItem>
+                <MenuItem onClick={homePage}>
                     <Typography textAlign="center">Home</Typography>
                 </MenuItem>
                 <MenuItem onClick={logoutHandler}>
