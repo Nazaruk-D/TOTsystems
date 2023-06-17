@@ -6,7 +6,7 @@ import { Path } from '../../../enums/path';
 import avatar from '../../png/avatar.png';
 
 const userData = {
-    id: '',
+    id: '123',
     avatar: '',
     name: '',
 };
@@ -67,7 +67,7 @@ const AuthButtonsBlock = () => {
                 open={Boolean(anchorElUser)}
                 onClose={handleCloseUserMenu}
             >
-                <MenuItem onClick={homePage}>
+                <MenuItem onClick={profilePage}>
                     <Typography textAlign="center">Profile</Typography>
                 </MenuItem>
                 <MenuItem onClick={homePage}>
