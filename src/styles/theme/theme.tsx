@@ -21,7 +21,7 @@ export const theme = createTheme({
             styleOverrides: {
                 root: {
                     '&.Mui-checked': {
-                        color: 'green',
+                        color: 'grey',
                     },
                 },
             },

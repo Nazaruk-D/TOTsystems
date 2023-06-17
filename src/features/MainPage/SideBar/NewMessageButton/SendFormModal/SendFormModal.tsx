@@ -2,8 +2,8 @@ import React, { FC, useEffect } from 'react';
 import { Box, Button, Grid, Modal, TextField, Typography, Autocomplete } from '@mui/material';
 import { useFormik } from 'formik';
 import SendIcon from '@mui/icons-material/Send';
-import { MessageErrorType } from '../../../types/MessageErrorType';
-import { theme } from '../../../styles/theme/theme';
+import { MessageErrorType } from '../../../../../types/MessageErrorType';
+import { theme } from '../../../../../styles/theme/theme';
 
 type SendFormModalPropsType = {
     openModal: boolean;
@@ -69,13 +69,10 @@ const SendFormModal: FC<SendFormModalPropsType> = ({ openModal, setOpenModal }) 
                     width: 500,
                     backgroundColor: theme.palette.background.paper,
                     boxShadow: theme.shadows[5],
-                    padding: theme.spacing(2, 4, 3),
+                    padding: theme.spacing(5, 4, 3),
                     outline: 'none',
                 }}
             >
-                <Typography variant="h5" gutterBottom>
-                    Send email form
-                </Typography>
                 <form onSubmit={formik.handleSubmit}>
                     <Grid container spacing={2}>
                         <Grid item xs={12}>
@@ -89,7 +86,7 @@ const SendFormModal: FC<SendFormModalPropsType> = ({ openModal, setOpenModal }) 
                                         {...params}
                                         fullWidth
                                         sx={{ marginBottom: theme.spacing(2) }}
-                                        label="Autocomplete"
+                                        label="Получатель"
                                         variant="outlined"
                                         {...formik.getFieldProps('recipient')}
                                     />
@@ -102,7 +99,7 @@ const SendFormModal: FC<SendFormModalPropsType> = ({ openModal, setOpenModal }) 
                         <Grid item xs={12}>
                             <TextField
                                 fullWidth
-                                label="Subject"
+                                label="Тема"
                                 variant="outlined"
                                 sx={{ marginBottom: theme.spacing(2) }}
                                 {...formik.getFieldProps('subject')}
@@ -114,7 +111,7 @@ const SendFormModal: FC<SendFormModalPropsType> = ({ openModal, setOpenModal }) 
                         <Grid item xs={12}>
                             <TextField
                                 fullWidth
-                                label="Message"
+                                label="Сообщение"
                                 variant="outlined"
                                 multiline
                                 rows={4}
@@ -125,16 +122,15 @@ const SendFormModal: FC<SendFormModalPropsType> = ({ openModal, setOpenModal }) 
                                 <div style={{ color: 'red' }}>{formik.errors.message}</div>
                             )}
                         </Grid>
-                        <Grid item xs={12}>
+                        <Grid item xs={12} sx={{ display: 'flex', justifyContent: 'flex-end' }}>
                             <Button
                                 type="submit"
                                 variant="contained"
                                 color="primary"
-                                sx={{ marginTop: theme.spacing(2) }}
                                 endIcon={<SendIcon />}
                                 disabled={!(formik.isValid && formik.dirty)}
                             >
-                                Send
+                                Отправить
                             </Button>
                         </Grid>
                     </Grid>

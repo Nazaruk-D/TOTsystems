@@ -13,7 +13,7 @@ import {
 } from '@mui/material';
 import { theme } from '../../../styles/theme/theme';
 import Message from './Message/Message';
-import SendFormModal from '../../../common/components/SendFormModal/SendFormModal';
+import SendFormModal from '../SideBar/NewMessageButton/SendFormModal/SendFormModal';
 import { MessageType } from '../../../types/MessageType';
 import { useAppDispatch, useAppSelector } from '../../../hooks/useRedux';
 import { messagesInsideSelector } from '../../../store/selectors/messagesSelector';
