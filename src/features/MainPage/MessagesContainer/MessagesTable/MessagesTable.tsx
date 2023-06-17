@@ -1,27 +1,29 @@
 import React, { useState } from 'react';
 import {
-    Grid,
-    Paper,
-    TableContainer,
-    Table,
-    TableHead,
-    TableRow,
-    TableCell,
-    TableBody,
-    TablePagination,
+    Box,
     Checkbox,
+    Grid,
+    Table,
+    TableBody,
+    TableCell,
+    TableContainer,
+    TableHead,
+    TablePagination,
+    TableRow,
 } from '@mui/material';
-import { theme } from '../../../styles/theme/theme';
+import { theme } from '../../../../styles/theme/theme';
 import Message from './Message/Message';
-import SendFormModal from '../SideBar/NewMessageButton/SendFormModal/SendFormModal';
-import { MessageType } from '../../../types/MessageType';
-import { useAppDispatch, useAppSelector } from '../../../hooks/useRedux';
-import { messagesInsideSelector } from '../../../store/selectors/messagesSelector';
-import { changeAllMessagesStatusAC } from '../../../store/slices/messagesSlice';
+import SendFormModal from '../../SideBar/NewMessageButton/SendFormModal/SendFormModal';
+import { useAppDispatch, useAppSelector } from '../../../../hooks/useRedux';
+import { filteredMessagesSelector, messagesInsideSelector } from '../../../../store/selectors/messagesSelector';
+import { changeAllMessagesStatusAC } from '../../../../store/slices/messagesSlice';
+import { selectorIsActiveFolder } from '../../../../store/selectors/appSelector';
 
 const MessagesTable = () => {
     const dispatch = useAppDispatch();
     const messages = useAppSelector(messagesInsideSelector);
+    const selectedFolder = useAppSelector(selectorIsActiveFolder);
+    const filteredMessages = useAppSelector((state) => filteredMessagesSelector(state, selectedFolder));
     const [isAllMessages, setIsAllMessages] = useState(false);
     const [openModal, setOpenModal] = useState(false);
     const [paginationPage, setPaginationPage] = useState(0);
@@ -32,7 +34,7 @@ const MessagesTable = () => {
         setPaginationPage(newPage);
     };
 
-    const slicedMessages = messages.slice(
+    const slicedMessages = filteredMessages.slice(
         paginationPage * paginationRowsPerPage,
         paginationPage * paginationRowsPerPage + paginationRowsPerPage,
     );
@@ -44,19 +46,15 @@ const MessagesTable = () => {
     };
 
     return (
-        <Grid
-            item
-            xs={9}
+        <Box
             sx={{
-                width: '80%',
-                height: '100%',
                 backgroundColor: theme.palette.primary.main,
                 borderRadius: '7px',
                 boxShadow: `0 0 5px rgba(100,100,100,0.3)`,
             }}
         >
-            <TableContainer sx={{ width: '100%', mt: 0.5 }}>
-                <Table sx={{ minWidth: 650 }} aria-label="simple table">
+            <TableContainer sx={{ width: '100%' }}>
+                <Table sx={{ minWidth: 650, mt: 0.5 }} aria-label="simple table">
                     <TableHead>
                         <TableRow style={{ backgroundColor: '#FFF' }}>
                             <TableCell width="10%">
@@ -76,7 +74,7 @@ const MessagesTable = () => {
                             </TableCell>
                         </TableRow>
                     </TableHead>
-                    {messages.length ? (
+                    {slicedMessages.length ? (
                         <TableBody>
                             {slicedMessages.map((message) => (
                                 <Message key={message.id} message={message} />
@@ -84,12 +82,9 @@ const MessagesTable = () => {
                         </TableBody>
                     ) : (
                         <TableBody>
-                            <TableRow sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
-                                <TableCell style={{ fontWeight: '600' }} width="10%">
-                                    {' '}
-                                </TableCell>
-                                <TableCell style={{ fontWeight: '600' }} width="30%">
-                                    `You don&apos;t have new emails`
+                            <TableRow sx={{ '&:last-child td, &:last-child th': { mt: 1 } }}>
+                                <TableCell colSpan={5} align="center" style={{ fontWeight: '500' }}>
+                                    Эта папка пуста
                                 </TableCell>
                             </TableRow>
                         </TableBody>
@@ -105,7 +100,7 @@ const MessagesTable = () => {
                 onPageChange={handleChangePage}
             />
             <SendFormModal openModal={openModal} setOpenModal={setOpenModal} />
-        </Grid>
+        </Box>
     );
 };
 

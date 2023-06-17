@@ -1,9 +1,9 @@
 import React from 'react';
 import dateFormat from 'dateformat';
 import { Checkbox, IconButton, TableCell, TableRow } from '@mui/material';
-import { MessageType } from '../../../../types/MessageType';
-import { useAppDispatch } from '../../../../hooks/useRedux';
-import { changeMessageStatusAC } from '../../../../store/slices/messagesSlice';
+import { MessageType } from '../../../../../types/MessageType';
+import { useAppDispatch } from '../../../../../hooks/useRedux';
+import { changeMessageStatusAC } from '../../../../../store/slices/messagesSlice';
 
 type MessagePropsType = {
     message: MessageType;
@@ -33,7 +33,7 @@ const Message: React.FC<MessagePropsType> = ({ message }) => {
                 />
             </TableCell>
             <TableCell component="th" scope="row">
-                {message.from}
+                {message.user.name}
             </TableCell>
             <TableCell component="th" scope="row">
                 {message.subject}

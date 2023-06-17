@@ -1,7 +1,7 @@
 import { combineReducers, configureStore } from '@reduxjs/toolkit';
 import appReducer from './slices/appSlice';
-import messagesReducer from './slices/messagesSlice';
 import { userAPISlice } from './api/userAPISlice';
+import messagesReducer from './slices/messagesSlice';
 
 const rootReducer = combineReducers({
     app: appReducer,
