@@ -4,17 +4,17 @@ import { Avatar, Box, Button, IconButton, Menu, MenuItem, Tooltip, Typography } 
 import { useAppDispatch, useAppSelector } from '../../../hooks/useRedux';
 import { Path } from '../../../enums/path';
 import avatar from '../../png/avatar.png';
-
-const userData = {
-    id: '123',
-    avatar: '',
-    name: '',
-};
+import { isLoggedInSelector, userDataSelector } from '../../../store/selectors/userSelector';
+import { useLogoutMutation } from '../../../store/api/authAPISlice';
+import { clearUserData, setIsLoggedIn } from '../../../store/slices/userSlice';
 
 const AuthButtonsBlock = () => {
     const dispatch = useAppDispatch();
     const navigate = useNavigate();
+    const isLoggedIn = useAppSelector(isLoggedInSelector);
+    const userData = useAppSelector(userDataSelector);
     const [anchorElUser, setAnchorElUser] = React.useState<null | HTMLElement>(null);
+    const [logout] = useLogoutMutation();
 
     const handleOpenUserMenu = (event: React.MouseEvent<HTMLElement>) => {
         setAnchorElUser(event.currentTarget);
@@ -33,14 +33,18 @@ const AuthButtonsBlock = () => {
         handleCloseUserMenu();
     };
 
-    const logoutHandler = async () => {};
+    const logoutHandler = async () => {
+        await logout({});
+        dispatch(setIsLoggedIn(false));
+        dispatch(clearUserData());
+    };
 
     const homePage = () => {
         navigate(Path.Root);
         handleCloseUserMenu();
     };
 
-    return userData ? (
+    return isLoggedIn ? (
         <Box sx={{ flexGrow: 0 }}>
             <Tooltip title="Open settings">
                 <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
@@ -68,13 +72,13 @@ const AuthButtonsBlock = () => {
                 onClose={handleCloseUserMenu}
             >
                 <MenuItem onClick={profilePage}>
-                    <Typography textAlign="center">Profile</Typography>
+                    <Typography textAlign="center">Профиль</Typography>
                 </MenuItem>
                 <MenuItem onClick={homePage}>
-                    <Typography textAlign="center">Home</Typography>
+                    <Typography textAlign="center">Главная</Typography>
                 </MenuItem>
                 <MenuItem onClick={logoutHandler}>
-                    <Typography textAlign="center">Logout</Typography>
+                    <Typography textAlign="center">Выйти</Typography>
                 </MenuItem>
             </Menu>
         </Box>

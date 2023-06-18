@@ -11,7 +11,7 @@ const routes = createRoutesFromElements(
     <Route path={Path.Root} element={<Root />}>
         <Route index element={<MainPage />} />
         <Route path={Path.Login} element={<Login />} />
-        <Route path={Path.Register} element={<Registration />} />
+        <Route path={Path.Registration} element={<Registration />} />
         <Route path={Path.Profile} element={<Profile />} />
         <Route path="*" element={<div>Page 404</div>} />,
     </Route>,

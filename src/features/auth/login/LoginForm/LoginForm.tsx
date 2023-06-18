@@ -1,17 +1,22 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useFormik } from 'formik';
 import { Box, Button, CircularProgress, Grid, Paper, TextField, Typography } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
-import { useAppDispatch } from '../../../../hooks/useRedux';
+import { useAppDispatch, useAppSelector } from '../../../../hooks/useRedux';
 import { setAppErrorAC } from '../../../../store/slices/appSlice';
 import { loginValidation } from '../loginValidation';
 import s from './LoginForm.module.scss';
 import { Path } from '../../../../enums/path';
+import { useLoginMutation } from '../../../../store/api/authAPISlice';
+import Loader from '../../../../common/components/Loader/Loader';
+import { setIsLoggedIn, setUserData } from '../../../../store/slices/userSlice';
+import { isLoggedInSelector } from '../../../../store/selectors/userSelector';
 
 const LoginForm = () => {
     const navigate = useNavigate();
     const dispatch = useAppDispatch();
-    const [inProgress, setInProgress] = useState(false);
+    const isLoggedIn = useAppSelector(isLoggedInSelector);
+    const [login, { data, isLoading, error }] = useLoginMutation();
 
     const formik = useFormik({
         initialValues: {
@@ -21,13 +26,29 @@ const LoginForm = () => {
         validate: (values) => loginValidation(values),
         onSubmit: async (values) => {
             try {
-                dispatch(setAppErrorAC('good'));
+                await login(values);
             } catch (err) {
                 dispatch(setAppErrorAC('Unknown error occurred'));
-                setInProgress(false);
             }
         },
     });
+
+    useEffect(() => {
+        if (!error && data) {
+            dispatch(setUserData(data.data));
+            dispatch(setIsLoggedIn(true));
+        }
+    }, [error, data]);
+
+    useEffect(() => {
+        if (isLoggedIn) {
+            navigate(Path.Root);
+        }
+    }, [isLoggedIn]);
+
+    if (isLoading) {
+        return <Loader />;
+    }
 
     return (
         <Paper elevation={3} className={s.loginFormContainer}>
@@ -78,7 +99,7 @@ const LoginForm = () => {
                         sx={{ mt: '20px' }}
                         disabled={!(formik.isValid && formik.dirty)}
                     >
-                        {inProgress ? <CircularProgress size={24} color="inherit" /> : 'Sign in'}
+                        Sign in
                     </Button>
                 </form>
                 <Grid container spacing={2} sx={{ mt: '10px' }}>
@@ -92,7 +113,13 @@ const LoginForm = () => {
                         <hr />
                     </Grid>
                 </Grid>
-                <Button variant="contained" color="primary" fullWidth sx={{ mt: '20px' }} onClick={() => navigate(Path.Register)}>
+                <Button
+                    variant="contained"
+                    color="primary"
+                    fullWidth
+                    sx={{ mt: '20px' }}
+                    onClick={() => navigate(Path.Registration)}
+                >
                     Sign up
                 </Button>
             </Box>

@@ -17,7 +17,7 @@ import SendFormModal from '../../SideBar/NewMessageButton/SendFormModal/SendForm
 import { useAppDispatch, useAppSelector } from '../../../../hooks/useRedux';
 import { filteredMessagesSelector, messagesInsideSelector } from '../../../../store/selectors/messagesSelector';
 import { changeAllMessagesStatusAC } from '../../../../store/slices/messagesSlice';
-import { selectorIsActiveFolder } from '../../../../store/selectors/appSelector';
+import { selectorIsActiveFolder } from '../../../../store/selectors/userSelector';
 
 const MessagesTable = () => {
     const dispatch = useAppDispatch();

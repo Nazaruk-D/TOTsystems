@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useFormik } from 'formik';
 import { Box, Button, CircularProgress, Paper, TextField, Typography } from '@mui/material';
@@ -7,15 +7,18 @@ import { setAppErrorAC, setAppInformMessage } from '../../../../store/slices/app
 import { registerValidation } from '../registerValidation';
 import { Path } from '../../../../enums/path';
 import s from '../../login/LoginForm/LoginForm.module.scss';
+import { useRegistrationMutation } from '../../../../store/api/authAPISlice';
+import { setIsLoggedIn } from '../../../../store/slices/userSlice';
 
 const RegistrationForm = () => {
     const dispatch = useAppDispatch();
     const navigate = useNavigate();
     const [inProgress, setInProgress] = useState(false);
+    const [sendRegistrationData, { data, error }] = useRegistrationMutation();
 
     const formik = useFormik({
         initialValues: {
-            user_name: '',
+            name: '',
             email: '',
             password: '',
             confirmPassword: '',
@@ -23,7 +26,9 @@ const RegistrationForm = () => {
         validate: (values) => registerValidation(values),
         onSubmit: async (values) => {
             try {
-                dispatch(setAppErrorAC('good'));
+                const { name, email, password } = values;
+                await sendRegistrationData({ name, email, password });
+                navigate(Path.Login);
             } catch {
                 dispatch(setAppErrorAC('error registered'));
                 setInProgress(false);
@@ -52,14 +57,12 @@ const RegistrationForm = () => {
                     <TextField
                         fullWidth
                         variant="standard"
-                        id="user_name"
+                        id="name"
                         label="User Name"
                         className={s.input}
-                        {...formik.getFieldProps('user_name')}
+                        {...formik.getFieldProps('name')}
                     />
-                    {formik.touched.user_name && formik.errors.user_name && (
-                        <div style={{ color: 'red' }}>{formik.errors.user_name}</div>
-                    )}
+                    {formik.touched.name && formik.errors.name && <div style={{ color: 'red' }}>{formik.errors.name}</div>}
                     <TextField
                         fullWidth
                         variant="standard"

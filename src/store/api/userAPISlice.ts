@@ -11,7 +11,7 @@ export const userAPISlice = createApi({
     endpoints: (builder) => ({
         getMessages: builder.query<ResponseType<MessageType>, { userId: string }>({
             query: ({ userId }) => `userId`,
-        }),
+        })
     }),
 });
 

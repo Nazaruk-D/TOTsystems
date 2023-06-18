@@ -4,9 +4,9 @@ import InboxIcon from '@mui/icons-material/Inbox';
 import DraftsIcon from '@mui/icons-material/Drafts';
 import ArchiveOutlinedIcon from '@mui/icons-material/ArchiveOutlined';
 import { useAppDispatch, useAppSelector } from '../../../../../hooks/useRedux';
-import { selectorIsActiveFolder } from '../../../../../store/selectors/appSelector';
 import { FoldersEnum } from '../../../../../enums/foldersEnum';
-import { setFolderName } from '../../../../../store/slices/appSlice';
+import { setFolderName } from '../../../../../store/slices/userSlice';
+import { selectorIsActiveFolder } from '../../../../../store/selectors/userSelector';
 
 const EmailFolders = () => {
     const dispatch = useAppDispatch();

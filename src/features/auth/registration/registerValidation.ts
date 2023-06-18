@@ -3,12 +3,12 @@ import { AuthErrorType } from '../../../types/FormikErrorTypes';
 
 export const registerValidation = (values: FormikValues) => {
     const errors: AuthErrorType = {};
-    if (!values.user_name) {
-        errors.user_name = `Name is required`;
-    } else if (values.user_name.length < 2) {
-        errors.user_name = `Name must be min 2 characters long`;
-    } else if (values.user_name.length > 20) {
-        errors.user_name = `Name must not be more than 30 characters`;
+    if (!values.name) {
+        errors.name = `Name is required`;
+    } else if (values.name.length < 2) {
+        errors.name = `Name must be min 2 characters long`;
+    } else if (values.name.length > 20) {
+        errors.name = `Name must not be more than 30 characters`;
     }
 
     if (!values.email) {

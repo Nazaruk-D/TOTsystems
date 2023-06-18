@@ -3,7 +3,7 @@ import { Box, IconButton, Typography } from '@mui/material';
 import { DeleteOutlined, FolderOutlined, MarkunreadOutlined } from '@mui/icons-material';
 import { theme } from '../../../../styles/theme/theme';
 import { useAppDispatch, useAppSelector } from '../../../../hooks/useRedux';
-import { selectorIsActiveFolder } from '../../../../store/selectors/appSelector';
+import { selectorIsActiveFolder } from '../../../../store/selectors/userSelector';
 
 const Settings = () => {
     const dispatch = useAppDispatch();
