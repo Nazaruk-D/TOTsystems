@@ -1,25 +1,17 @@
 import React from 'react';
-import { Box, Divider, List, ListItem, ListItemButton, ListItemIcon, ListItemText } from '@mui/material';
+import { Box, Divider, List } from '@mui/material';
 import InboxIcon from '@mui/icons-material/Inbox';
 import DraftsIcon from '@mui/icons-material/Drafts';
 import ArchiveOutlinedIcon from '@mui/icons-material/ArchiveOutlined';
 import { useAppDispatch, useAppSelector } from '../../../../../hooks/useRedux';
 import { FoldersEnum } from '../../../../../enums/foldersEnum';
 import { setFolderName } from '../../../../../store/slices/userSlice';
-import { selectorIsActiveFolder } from '../../../../../store/selectors/userSelector';
+import { userFoldersSelector } from '../../../../../store/selectors/userSelector';
+import SideBarButton from '../../../../../common/components/SideBarButton/SideBarButton';
 
 const EmailFolders = () => {
     const dispatch = useAppDispatch();
-    const isActiveFolder = useAppSelector(selectorIsActiveFolder);
-
-    const getButtonStyle = (folderName: string) => {
-        if (isActiveFolder === folderName) {
-            return {
-                backgroundColor: 'rgba(0, 0, 0, 0.04)',
-            };
-        }
-        return {};
-    };
+    const userFolders = useAppSelector(userFoldersSelector);
 
     const onChangeFolder = (folderName: string) => {
         dispatch(setFolderName(folderName));
@@ -27,61 +19,19 @@ const EmailFolders = () => {
 
     return (
         <Box>
-            <nav aria-label="main mailbox folders">
-                <List>
-                    <ListItem disablePadding>
-                        <ListItemButton
-                            sx={getButtonStyle(FoldersEnum.Incoming)}
-                            onClick={() => onChangeFolder(FoldersEnum.Incoming)}
-                        >
-                            <ListItemIcon>
-                                <InboxIcon />
-                            </ListItemIcon>
-                            <ListItemText primary="Входящие" />
-                        </ListItemButton>
-                    </ListItem>
-                    <ListItem disablePadding>
-                        <ListItemButton
-                            sx={getButtonStyle(FoldersEnum.Outgoing)}
-                            onClick={() => onChangeFolder(FoldersEnum.Outgoing)}
-                        >
-                            <ListItemIcon>
-                                <DraftsIcon />
-                            </ListItemIcon>
-                            <ListItemText primary="Отправленные" />
-                        </ListItemButton>
-                    </ListItem>
-                    <ListItem disablePadding>
-                        <ListItemButton
-                            sx={getButtonStyle(FoldersEnum.Drafts)}
-                            onClick={() => onChangeFolder(FoldersEnum.Drafts)}
-                        >
-                            <ListItemIcon>
-                                <ArchiveOutlinedIcon />
-                            </ListItemIcon>
-                            <ListItemText primary="Черновики" />
-                        </ListItemButton>
-                    </ListItem>
-                </List>
-            </nav>
+            <List>
+                <SideBarButton folderName={FoldersEnum.Incoming} onChangeFolder={onChangeFolder} icon={<InboxIcon />} />
+                <SideBarButton folderName={FoldersEnum.Outgoing} onChangeFolder={onChangeFolder} icon={<DraftsIcon />} />
+                <SideBarButton folderName={FoldersEnum.Drafts} onChangeFolder={onChangeFolder} icon={<ArchiveOutlinedIcon />} />
+            </List>
             <Divider />
-            <nav aria-label="secondary mailbox folders">
-                <List>
-                    <ListItem disablePadding>
-                        <ListItemButton
-                            sx={getButtonStyle(FoldersEnum.Remote)}
-                            onClick={() => onChangeFolder(FoldersEnum.Remote)}
-                        >
-                            <ListItemText primary="Удаленные" />
-                        </ListItemButton>
-                    </ListItem>
-                    <ListItem disablePadding>
-                        <ListItemButton sx={getButtonStyle(FoldersEnum.Spam)} onClick={() => onChangeFolder(FoldersEnum.Spam)}>
-                            <ListItemText primary="Спам" />
-                        </ListItemButton>
-                    </ListItem>
-                </List>
-            </nav>
+            <List>
+                <SideBarButton folderName={FoldersEnum.Remote} onChangeFolder={onChangeFolder} />
+                <SideBarButton folderName={FoldersEnum.Spam} onChangeFolder={onChangeFolder} />
+                {userFolders.map((folder) => (
+                    <SideBarButton key={folder} folderName={folder} onChangeFolder={onChangeFolder} />
+                ))}
+            </List>
         </Box>
     );
 };

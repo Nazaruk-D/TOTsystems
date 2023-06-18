@@ -3,6 +3,10 @@ import { Box, Button, Grid, Modal, TextField } from '@mui/material';
 import SendIcon from '@mui/icons-material/Send';
 import { useFormik } from 'formik';
 import { theme } from '../../../../../../styles/theme/theme';
+import { useAppDispatch, useAppSelector } from '../../../../../../hooks/useRedux';
+import { userIdSelector } from '../../../../../../store/selectors/userSelector';
+import { useCreateFolderMutation } from '../../../../../../store/api/userAPISlice';
+import { setAppErrorAC } from '../../../../../../store/slices/appSlice';
 
 type CreateFolderModalPropsType = {
     openModal: boolean;
@@ -10,6 +14,10 @@ type CreateFolderModalPropsType = {
 };
 
 const CreateFolderModal: FC<CreateFolderModalPropsType> = ({ openModal, setOpenModal }) => {
+    const dispatch = useAppDispatch();
+    const userId = useAppSelector(userIdSelector);
+    const [createFolder, { isSuccess }] = useCreateFolderMutation();
+
     const formik = useFormik({
         initialValues: {
             nameFolder: '',
@@ -24,16 +32,29 @@ const CreateFolderModal: FC<CreateFolderModalPropsType> = ({ openModal, setOpenM
             }
             return errors;
         },
-        onSubmit: (values) => {
-            console.log(values);
+        onSubmit: async (values) => {
+            try {
+                const { nameFolder } = values;
+                if (userId) {
+                    await createFolder({ nameFolder, userId });
+                }
+            } catch {
+                dispatch(setAppErrorAC('Ошибка при создаа новой папки'));
+            }
         },
     });
-
-    useEffect(() => {}, [formik.values.nameFolder]);
 
     const handleClose = () => {
         setOpenModal(false);
     };
+
+    useEffect(() => {
+        if (isSuccess) {
+            handleClose();
+            formik.resetForm();
+        }
+    }, [isSuccess]);
+
     return (
         <Modal open={openModal} onClose={handleClose} style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
             <Box

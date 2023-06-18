@@ -1,27 +1,27 @@
 import React from 'react';
-import { Box, IconButton, Typography } from '@mui/material';
+import { Box, Grid, IconButton, Menu, MenuItem, Typography } from '@mui/material';
 import { DeleteOutlined, FolderOutlined, MarkunreadOutlined } from '@mui/icons-material';
 import { theme } from '../../../../styles/theme/theme';
 import { useAppDispatch, useAppSelector } from '../../../../hooks/useRedux';
-import { selectorIsActiveFolder } from '../../../../store/selectors/userSelector';
+import { selectorIsActiveFolder, userFoldersSelector } from '../../../../store/selectors/userSelector';
+import { mainFolders } from '../../../../common/constant/folders';
 
 const Settings = () => {
     const dispatch = useAppDispatch();
     const isActiveFolder = useAppSelector(selectorIsActiveFolder);
-    const handleDelete = () => {
-        // Обработчик удаления выбранных писем
-    };
+    const userFolders = useAppSelector(userFoldersSelector);
+    const [anchorElUser, setAnchorElUser] = React.useState<null | HTMLElement>(null);
+    const folders = [...mainFolders, ...userFolders];
 
-    const handleMoveToFolder = () => {
-        // Обработчик перемещения выбранных писем в папку
-    };
+    const handleDelete = () => {};
 
-    const handleMarkUnread = () => {
-        // Обработчик отметки выбранных писем как непрочитанных
-    };
+    const handleMoveToFolder = () => {};
+
+    const handleMarkUnread = () => {};
 
     return (
-        <Box
+        <Grid
+            container
             sx={{
                 backgroundColor: theme.palette.primary.main,
                 borderRadius: '7px',
@@ -33,23 +33,48 @@ const Settings = () => {
                 justifyContent: 'space-between',
             }}
         >
-            <Box>
-                <IconButton>
+            <Grid item md={8.5}>
+                <IconButton sx={{ borderRadius: '5px' }}>
+                    <Typography sx={{ mr: 1 }}>Удалить</Typography>
                     <DeleteOutlined />
                 </IconButton>
-                <IconButton>
+                <IconButton sx={{ borderRadius: '5px' }} onClick={(event) => setAnchorElUser(event.currentTarget)}>
+                    <Typography sx={{ mr: 1 }}>Переместить</Typography>
                     <FolderOutlined />
                 </IconButton>
-                <IconButton>
+                <Menu
+                    sx={{ mt: '45px' }}
+                    id="menu-appbar"
+                    anchorEl={anchorElUser}
+                    anchorOrigin={{
+                        vertical: 'top',
+                        horizontal: 'right',
+                    }}
+                    keepMounted
+                    transformOrigin={{
+                        vertical: 'top',
+                        horizontal: 'right',
+                    }}
+                    open={Boolean(anchorElUser)}
+                    onClose={() => setAnchorElUser(null)}
+                >
+                    {folders.map((folder) => (
+                        <MenuItem onClick={() => {}}>
+                            <Typography textAlign="center">{folder}</Typography>
+                        </MenuItem>
+                    ))}
+                </Menu>
+                <IconButton sx={{ borderRadius: '5px' }}>
+                    <Typography sx={{ mr: 1 }}>Отметить прочитанным</Typography>
                     <MarkunreadOutlined />
                 </IconButton>
-            </Box>
-            <Box>
+            </Grid>
+            <Grid item md={3.5} sx={{ display: 'flex', flexDirection: 'row-reverse' }}>
                 <Typography variant="h5" sx={{ fontWeight: 600 }}>
                     {isActiveFolder}
                 </Typography>
-            </Box>
-        </Box>
+            </Grid>
+        </Grid>
     );
 };
 

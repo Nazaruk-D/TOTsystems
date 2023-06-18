@@ -1,3 +1,3 @@
 import { FoldersEnum } from '../../enums/foldersEnum';
 
-export const mainFolders = [FoldersEnum.Incoming, FoldersEnum.Outgoing, FoldersEnum.Drafts];
+export const mainFolders = [FoldersEnum.Incoming, FoldersEnum.Outgoing, FoldersEnum.Drafts, FoldersEnum.Remote, FoldersEnum.Spam];

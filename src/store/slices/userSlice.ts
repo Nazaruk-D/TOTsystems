@@ -10,10 +10,11 @@ export type InitialStateType = {
 
 const initialState: InitialStateType = {
     userData: {
-        id: '',
+        id: null,
         name: '',
         email: '',
         avatar: '',
+        folders: [],
     },
     isActiveFolder: FoldersEnum.Incoming,
     isLoggedIn: false,
@@ -34,10 +35,11 @@ const userSlice = createSlice({
         },
         clearUserData(state) {
             state.userData = {
-                id: '',
+                id: null,
                 name: '',
                 email: '',
                 avatar: '',
+                folders: [],
             };
         },
     },
