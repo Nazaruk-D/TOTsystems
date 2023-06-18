@@ -4,6 +4,7 @@ import { LoginType, RegistrationType } from '../../types/AuthType';
 import { PathAPI } from '../../enums/PathAPI';
 import { MessageType } from '../../types/MessageType';
 import { UserType } from '../../types/UserType';
+import { ServerData } from '../../types/ServerData';
 
 export const authAPISlice = createApi({
     reducerPath: 'authAPI',
@@ -12,7 +13,7 @@ export const authAPISlice = createApi({
         credentials: 'include',
     }),
     endpoints: (builder) => ({
-        me: builder.query<ResponseType<UserType>, Record<string, never>>({
+        me: builder.query<ResponseType<ServerData>, Record<string, never>>({
             query: () => `${PathAPI.Me}`,
         }),
         registration: builder.mutation<ResponseType, RegistrationType>({
@@ -22,7 +23,7 @@ export const authAPISlice = createApi({
                 body: { name, email, password },
             }),
         }),
-        login: builder.mutation<ResponseType<UserType>, LoginType>({
+        login: builder.mutation<ResponseType<ServerData>, LoginType>({
             query: ({ email, password }) => ({
                 url: `${PathAPI.Login}`,
                 method: 'POST',

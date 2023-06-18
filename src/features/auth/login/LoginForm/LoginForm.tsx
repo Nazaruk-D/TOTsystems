@@ -11,6 +11,7 @@ import { useLoginMutation } from '../../../../store/api/authAPISlice';
 import Loader from '../../../../common/components/Loader/Loader';
 import { setIsLoggedIn, setUserData } from '../../../../store/slices/userSlice';
 import { isLoggedInSelector } from '../../../../store/selectors/userSelector';
+import { setMessages, setUsers } from '../../../../store/slices/messagesSlice';
 
 const LoginForm = () => {
     const navigate = useNavigate();
@@ -35,7 +36,10 @@ const LoginForm = () => {
 
     useEffect(() => {
         if (!error && data) {
-            dispatch(setUserData(data.data));
+            const { userData, messages, users } = data.data;
+            dispatch(setUserData(userData));
+            dispatch(setMessages(messages));
+            dispatch(setUsers(users));
             dispatch(setIsLoggedIn(true));
         }
     }, [error, data]);

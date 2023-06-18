@@ -2,8 +2,11 @@ import React from 'react';
 import { Avatar, Box, Container, Grid, Typography } from '@mui/material';
 import { theme } from '../../styles/theme/theme';
 import ava from '../../common/png/avatar.png';
+import { useAppSelector } from '../../hooks/useRedux';
+import { userDataSelector } from '../../store/selectors/userSelector';
 
 const Profile = () => {
+    const userData = useAppSelector(userDataSelector);
     return (
         <Container sx={{ mt: '2rem' }}>
             <Grid container justifyContent="center">
@@ -23,13 +26,13 @@ const Profile = () => {
                     }}
                 >
                     <Box sx={{ mb: 3 }}>
-                        <Avatar src={ava} alt="Аватарка" sx={{ width: 120, height: 120 }} />
+                        <Avatar src={ava} alt="Аватарка" sx={{ width: 120, height: 120, border: '1px solid grey' }} />
                     </Box>
                     <Typography variant="h5" sx={{ mb: 1 }}>
-                        Имя пользователя
+                        {userData.name}
                     </Typography>
                     <Typography variant="body1" sx={{ mb: 3 }}>
-                        Email пользователя
+                        {userData.email}
                     </Typography>
                 </Grid>
             </Grid>

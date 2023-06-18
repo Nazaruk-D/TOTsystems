@@ -7,6 +7,7 @@ import avatar from '../../png/avatar.png';
 import { isLoggedInSelector, userDataSelector } from '../../../store/selectors/userSelector';
 import { useLogoutMutation } from '../../../store/api/authAPISlice';
 import { clearUserData, setIsLoggedIn } from '../../../store/slices/userSlice';
+import { setUsers } from '../../../store/slices/messagesSlice';
 
 const AuthButtonsBlock = () => {
     const dispatch = useAppDispatch();
@@ -37,6 +38,7 @@ const AuthButtonsBlock = () => {
         await logout({});
         dispatch(setIsLoggedIn(false));
         dispatch(clearUserData());
+        dispatch(setUsers([]));
     };
 
     const homePage = () => {

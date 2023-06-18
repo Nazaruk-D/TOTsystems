@@ -1,8 +1,10 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { MessageType } from '../../types/MessageType';
+import { UserType } from '../../types/UserType';
 
 export type InitialStateType = {
     messages: MessageType[];
+    users: UserType[];
 };
 
 const initialState: InitialStateType = {
@@ -60,25 +62,32 @@ const initialState: InitialStateType = {
             isSelected: false,
         },
     ],
+    users: [],
 };
 
 const messagesSlice = createSlice({
     name: 'messages',
     initialState,
     reducers: {
-        changeMessageStatusAC(state, action: PayloadAction<{ id: string; status: boolean }>) {
+        changeMessageStatus(state, action: PayloadAction<{ id: string; status: boolean }>) {
             const { id, status } = action.payload;
             state.messages = state.messages.map((message) => (message.id === id ? { ...message, isSelected: status } : message));
         },
-        changeAllMessagesStatusAC(state, action: PayloadAction<{ ids: string[]; status: boolean }>) {
+        changeAllMessagesStatus(state, action: PayloadAction<{ ids: string[]; status: boolean }>) {
             const { ids, status } = action.payload;
             state.messages = state.messages.map((message) =>
                 ids.includes(message.id) ? { ...message, isSelected: status } : message,
             );
         },
+        setUsers(state, action: PayloadAction<UserType[]>) {
+            state.users = action.payload;
+        },
+        setMessages(state, action: PayloadAction<MessageType[]>) {
+            state.messages = action.payload;
+        },
     },
 });
 
-export const { changeMessageStatusAC, changeAllMessagesStatusAC } = messagesSlice.actions;
+export const { changeMessageStatus, changeAllMessagesStatus, setUsers, setMessages } = messagesSlice.actions;
 
 export default messagesSlice.reducer;

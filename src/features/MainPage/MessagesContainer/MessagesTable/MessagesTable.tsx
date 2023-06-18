@@ -1,22 +1,11 @@
 import React, { useState } from 'react';
-import {
-    Box,
-    Checkbox,
-    Grid,
-    Table,
-    TableBody,
-    TableCell,
-    TableContainer,
-    TableHead,
-    TablePagination,
-    TableRow,
-} from '@mui/material';
+import { Box, Checkbox, Table, TableBody, TableCell, TableContainer, TableHead, TablePagination, TableRow } from '@mui/material';
 import { theme } from '../../../../styles/theme/theme';
 import Message from './Message/Message';
 import SendFormModal from '../../SideBar/NewMessageButton/SendFormModal/SendFormModal';
 import { useAppDispatch, useAppSelector } from '../../../../hooks/useRedux';
 import { filteredMessagesSelector, messagesInsideSelector } from '../../../../store/selectors/messagesSelector';
-import { changeAllMessagesStatusAC } from '../../../../store/slices/messagesSlice';
+import { changeAllMessagesStatus } from '../../../../store/slices/messagesSlice';
 import { selectorIsActiveFolder } from '../../../../store/selectors/userSelector';
 
 const MessagesTable = () => {
@@ -41,7 +30,7 @@ const MessagesTable = () => {
 
     const onChangeHandler = () => {
         const ids = slicedMessages.map((message) => message.id);
-        dispatch(changeAllMessagesStatusAC({ ids, status: !isAllMessages }));
+        dispatch(changeAllMessagesStatus({ ids, status: !isAllMessages }));
         setIsAllMessages(!isAllMessages);
     };
 

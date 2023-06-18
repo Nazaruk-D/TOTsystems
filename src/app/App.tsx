@@ -5,6 +5,7 @@ import { useMeQuery } from '../store/api/authAPISlice';
 import Loader from '../common/components/Loader/Loader';
 import { useAppDispatch } from '../hooks/useRedux';
 import { setIsLoggedIn, setUserData } from '../store/slices/userSlice';
+import { setMessages, setUsers } from '../store/slices/messagesSlice';
 
 function App() {
     const dispatch = useAppDispatch();
@@ -12,8 +13,10 @@ function App() {
     const { data, isLoading, error } = useMeQuery({});
 
     if (data && !error) {
-        const userData = data.data;
+        const { userData, messages, users } = data.data;
         dispatch(setUserData(userData));
+        dispatch(setMessages(messages));
+        dispatch(setUsers(users));
         dispatch(setIsLoggedIn(true));
     }
 

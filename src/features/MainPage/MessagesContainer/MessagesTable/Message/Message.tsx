@@ -3,7 +3,7 @@ import dateFormat from 'dateformat';
 import { Checkbox, IconButton, TableCell, TableRow } from '@mui/material';
 import { MessageType } from '../../../../../types/MessageType';
 import { useAppDispatch } from '../../../../../hooks/useRedux';
-import { changeMessageStatusAC } from '../../../../../store/slices/messagesSlice';
+import { changeMessageStatus } from '../../../../../store/slices/messagesSlice';
 
 type MessagePropsType = {
     message: MessageType;
@@ -12,7 +12,7 @@ type MessagePropsType = {
 const Message: React.FC<MessagePropsType> = ({ message }) => {
     const dispatch = useAppDispatch();
     const onChangeStatusHandler = (id: string, status: boolean) => {
-        dispatch(changeMessageStatusAC({ id, status }));
+        dispatch(changeMessageStatus({ id, status }));
     };
     return (
         <TableRow
