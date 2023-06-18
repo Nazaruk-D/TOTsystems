@@ -53,7 +53,7 @@ const AuthButtonsBlock = () => {
                     <Avatar
                         alt="Remy Sharp"
                         sx={{ width: '45px', height: '45px', border: '2px solid grey' }}
-                        src={userData.avatar || avatar}
+                        src={userData && userData.avatar ? userData.avatar : avatar}
                     />
                 </IconButton>
             </Tooltip>

@@ -3,4 +3,5 @@ export enum PathAPI {
     Login = '/auth/login',
     Logout = '/auth/logout',
     Registration = '/auth/registration',
+    Message = '/message',
 }

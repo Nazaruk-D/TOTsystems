@@ -4,6 +4,11 @@ import { useFormik } from 'formik';
 import SendIcon from '@mui/icons-material/Send';
 import { MessageErrorType } from '../../../../../types/MessageErrorType';
 import { theme } from '../../../../../styles/theme/theme';
+import { useAppDispatch, useAppSelector } from '../../../../../hooks/useRedux';
+import { usersSelector } from '../../../../../store/selectors/messagesSelector';
+import { userEmailSelector } from '../../../../../store/selectors/userSelector';
+import { useSendMessageMutation } from '../../../../../store/api/messagesAPISlice';
+import { setAppErrorAC } from '../../../../../store/slices/appSlice';
 
 type SendFormModalPropsType = {
     openModal: boolean;
@@ -11,8 +16,11 @@ type SendFormModalPropsType = {
 };
 
 const SendFormModal: FC<SendFormModalPropsType> = ({ openModal, setOpenModal }) => {
-    const userName = 'UserName';
-    const users = ['Name'];
+    const dispatch = useAppDispatch();
+    const sender = useAppSelector(userEmailSelector);
+    const users = useAppSelector(usersSelector);
+    const usersEmail = users.map((user) => user.email);
+    const [sendMessage, { isSuccess }] = useSendMessageMutation();
 
     const formik = useFormik({
         initialValues: {
@@ -23,39 +31,41 @@ const SendFormModal: FC<SendFormModalPropsType> = ({ openModal, setOpenModal }) 
         validate: (values) => {
             const errors: MessageErrorType = {};
             if (!values.recipient) {
-                errors.recipient = 'Recipient Required';
+                errors.recipient = 'Укажите email получателя';
             }
-            if (values.recipient.length > 20) {
-                errors.recipient = 'Name cannot be longer than 20 characters';
+            if (!/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(values.recipient)) {
+                errors.recipient = 'Неверно указан email получателя';
             }
             if (!values.subject) {
-                errors.subject = 'Subject Required';
+                errors.subject = 'Укажите тему письма';
             }
             if (values.subject.length > 40) {
-                errors.subject = 'Subject length must not exceed 40 characters';
+                errors.subject = 'Тема не должна превышать 40 символов';
             }
             if (values.message.length > 140) {
-                errors.message = 'Message length should not exceed 140 characters';
+                errors.message = 'Длинна сообщения не должна превышать 140 символов';
             }
             if (!values.message) {
-                errors.message = 'Message Required';
+                errors.message = 'Напишите Ваше сообщение';
             }
             return errors;
         },
-        onSubmit: (values) => {
-            const newObj = {
-                senderName: userName,
-                recipientName: values.recipient,
-                subject: values.subject,
-                message: values.message,
-            };
-
-            setOpenModal(false);
-            formik.resetForm();
+        onSubmit: async (values) => {
+            try {
+                const { recipient, subject, message } = values;
+                const sendData = { sender, recipient, subject, message };
+                await sendMessage(sendData);
+            } catch {
+                dispatch(setAppErrorAC('Ошибка при отправке сообщения'));
+            }
         },
     });
-
-    useEffect(() => {}, [formik.values.recipient]);
+    useEffect(() => {
+        if (isSuccess) {
+            setOpenModal(false);
+            formik.resetForm();
+        }
+    }, [isSuccess]);
 
     const handleClose = () => {
         setOpenModal(false);
@@ -77,7 +87,7 @@ const SendFormModal: FC<SendFormModalPropsType> = ({ openModal, setOpenModal }) 
                     <Grid container spacing={2}>
                         <Grid item xs={12}>
                             <Autocomplete
-                                options={users}
+                                options={usersEmail}
                                 filterSelectedOptions
                                 value={formik.values.recipient}
                                 onChange={(event, value) => formik.setFieldValue('recipient', value)}
@@ -86,7 +96,7 @@ const SendFormModal: FC<SendFormModalPropsType> = ({ openModal, setOpenModal }) 
                                         {...params}
                                         fullWidth
                                         sx={{ marginBottom: theme.spacing(2) }}
-                                        label="Получатель"
+                                        label="Кому"
                                         variant="outlined"
                                         {...formik.getFieldProps('recipient')}
                                     />
