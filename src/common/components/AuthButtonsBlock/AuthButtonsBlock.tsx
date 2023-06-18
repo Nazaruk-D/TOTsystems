@@ -1,5 +1,5 @@
-import React from 'react';
-import { useNavigate } from 'react-router-dom';
+import React, { useEffect } from 'react';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { Avatar, Box, Button, IconButton, Menu, MenuItem, Tooltip, Typography } from '@mui/material';
 import { useAppDispatch, useAppSelector } from '../../../hooks/useRedux';
 import { Path } from '../../../enums/path';
@@ -12,6 +12,7 @@ import { setUsers } from '../../../store/slices/messagesSlice';
 const AuthButtonsBlock = () => {
     const dispatch = useAppDispatch();
     const navigate = useNavigate();
+    const location = useLocation();
     const isLoggedIn = useAppSelector(isLoggedInSelector);
     const userData = useAppSelector(userDataSelector);
     const [anchorElUser, setAnchorElUser] = React.useState<null | HTMLElement>(null);
@@ -45,6 +46,10 @@ const AuthButtonsBlock = () => {
         navigate(Path.Root);
         handleCloseUserMenu();
     };
+
+    useEffect(() => {
+        handleCloseUserMenu();
+    }, [location]);
 
     return isLoggedIn ? (
         <Box sx={{ flexGrow: 0 }}>

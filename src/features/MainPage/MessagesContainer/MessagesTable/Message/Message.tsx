@@ -11,7 +11,7 @@ type MessagePropsType = {
 
 const Message: React.FC<MessagePropsType> = ({ message }) => {
     const dispatch = useAppDispatch();
-    const onChangeStatusHandler = (id: string, status: boolean) => {
+    const onChangeStatusHandler = (id: number, status: boolean) => {
         dispatch(changeMessageStatus({ id, status }));
     };
     return (
@@ -27,13 +27,13 @@ const Message: React.FC<MessagePropsType> = ({ message }) => {
         >
             <TableCell component="th" scope="row">
                 <Checkbox
-                    checked={message.isSelected}
-                    onChange={() => onChangeStatusHandler(message.id, !message.isSelected)}
-                    sx={{ color: message.isSelected ? 'black' : 'gray' }}
+                    checked={message.is_selected}
+                    onChange={() => onChangeStatusHandler(message.id, !message.is_selected)}
+                    sx={{ color: message.is_selected ? 'black' : 'gray' }}
                 />
             </TableCell>
             <TableCell component="th" scope="row">
-                {message.user.name}
+                {message.sender.name}
             </TableCell>
             <TableCell component="th" scope="row">
                 {message.subject}
@@ -42,7 +42,7 @@ const Message: React.FC<MessagePropsType> = ({ message }) => {
                 {message.message}
             </TableCell>
             <TableCell component="th" scope="row">
-                {message.created_at}
+                {dateFormat(message.created_at)}
             </TableCell>
         </TableRow>
     );

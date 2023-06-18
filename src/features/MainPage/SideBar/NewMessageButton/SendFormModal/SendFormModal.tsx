@@ -1,5 +1,5 @@
 import React, { FC, useEffect } from 'react';
-import { Box, Button, Grid, Modal, TextField, Typography, Autocomplete } from '@mui/material';
+import { Autocomplete, Box, Button, Grid, Modal, TextField } from '@mui/material';
 import { useFormik } from 'formik';
 import SendIcon from '@mui/icons-material/Send';
 import { MessageErrorType } from '../../../../../types/MessageErrorType';
@@ -54,6 +54,7 @@ const SendFormModal: FC<SendFormModalPropsType> = ({ openModal, setOpenModal }) 
             try {
                 const { recipient, subject, message } = values;
                 const sendData = { sender, recipient, subject, message };
+                console.log(sender);
                 await sendMessage(sendData);
             } catch {
                 dispatch(setAppErrorAC('Ошибка при отправке сообщения'));

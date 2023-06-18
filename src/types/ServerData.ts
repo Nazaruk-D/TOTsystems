@@ -4,5 +4,8 @@ import { UserType } from './UserType';
 export type ServerData = {
     userData: UserType;
     users: UserType[];
-    messages: MessageType[];
+    messages: {
+        incoming: MessageType[];
+        outgoing: MessageType[];
+    };
 };

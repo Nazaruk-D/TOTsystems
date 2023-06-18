@@ -9,7 +9,6 @@ import AuthButtonsBlock from '../../common/components/AuthButtonsBlock/AuthButto
 const Header = () => {
     const dispatch = useAppDispatch();
     const navigate = useNavigate();
-
     const onSearchQuery = (value: string) => {};
 
     return (

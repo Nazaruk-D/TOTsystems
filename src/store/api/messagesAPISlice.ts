@@ -14,8 +14,8 @@ export const messagesAPISlice = createApi({
         credentials: 'include',
     }),
     endpoints: (builder) => ({
-        fetchMessages: builder.query<ResponseType<ServerData>, Record<string, never>>({
-            query: () => `${PathAPI.Message}`,
+        fetchMessages: builder.query<ResponseType<ServerData>, { userId: string }>({
+            query: ({ userId }) => `${PathAPI.Message}`,
         }),
         sendMessage: builder.mutation<ResponseType, SendMessageType>({
             query: ({ sender, recipient, message, subject }) => ({

@@ -38,7 +38,7 @@ const LoginForm = () => {
         if (!error && data) {
             const { userData, messages, users } = data.data;
             dispatch(setUserData(userData));
-            dispatch(setMessages(messages));
+            dispatch(setMessages({ incomingMessages: messages.incoming, outgoingMessages: messages.outgoing }));
             dispatch(setUsers(users));
             dispatch(setIsLoggedIn(true));
         }

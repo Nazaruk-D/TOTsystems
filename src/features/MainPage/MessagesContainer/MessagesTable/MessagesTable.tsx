@@ -4,15 +4,15 @@ import { theme } from '../../../../styles/theme/theme';
 import Message from './Message/Message';
 import SendFormModal from '../../SideBar/NewMessageButton/SendFormModal/SendFormModal';
 import { useAppDispatch, useAppSelector } from '../../../../hooks/useRedux';
-import { filteredMessagesSelector, messagesInsideSelector } from '../../../../store/selectors/messagesSelector';
+import { filteredIncomingMessagesSelector } from '../../../../store/selectors/messagesSelector';
 import { changeAllMessagesStatus } from '../../../../store/slices/messagesSlice';
 import { selectorIsActiveFolder } from '../../../../store/selectors/userSelector';
+import { MessageType } from '../../../../types/MessageType';
 
 const MessagesTable = () => {
     const dispatch = useAppDispatch();
-    const messages = useAppSelector(messagesInsideSelector);
     const selectedFolder = useAppSelector(selectorIsActiveFolder);
-    const filteredMessages = useAppSelector((state) => filteredMessagesSelector(state, selectedFolder));
+    const filteredMessages = useAppSelector((state) => filteredIncomingMessagesSelector(state, selectedFolder));
     const [isAllMessages, setIsAllMessages] = useState(false);
     const [openModal, setOpenModal] = useState(false);
     const [paginationPage, setPaginationPage] = useState(0);
@@ -23,7 +23,7 @@ const MessagesTable = () => {
         setPaginationPage(newPage);
     };
 
-    const slicedMessages = filteredMessages.slice(
+    const slicedMessages: MessageType[] = filteredMessages.slice(
         paginationPage * paginationRowsPerPage,
         paginationPage * paginationRowsPerPage + paginationRowsPerPage,
     );
@@ -83,7 +83,7 @@ const MessagesTable = () => {
             <TablePagination
                 rowsPerPageOptions={[paginationRowsPerPage]}
                 component="div"
-                count={messages.length}
+                count={slicedMessages.length}
                 rowsPerPage={paginationRowsPerPage}
                 page={paginationPage}
                 onPageChange={handleChangePage}
