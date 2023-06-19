@@ -31,9 +31,8 @@ const Settings = () => {
     const incomingIdCheckedMessages = useAppSelector(incomingCheckedIdMessagesSelector);
     const outgoingIdCheckedMessages = useAppSelector(outgoingCheckedIdMessagesSelector);
     const userEmail = useAppSelector(userEmailSelector);
-    const userId = useAppSelector(userIdSelector);
     const [anchorElUser, setAnchorElUser] = React.useState<null | HTMLElement>(null);
-    const folders = [...mainFolders, ...userFolders];
+    const folders = userFolders ? [...mainFolders, ...userFolders] : mainFolders;
     const [changeMessagesFolder] = useChangeMessagesFolderMutation();
     const [deleteMessages] = useDeleteMessageMutation();
     const [markMessages] = useMarkReadMessagesMutation();
@@ -54,10 +53,6 @@ const Settings = () => {
     }, [dispatch, data, error, isSuccess]);
 
     const handleMoveToFolder = async (folder: string) => {
-        if (isOutgoing) {
-            dispatch(setAppErrorAC('Нельзя переместить письма из папки "Отправленные"'));
-            return;
-        }
         if (folder === FoldersEnum.Outgoing) {
             dispatch(setAppErrorAC('Нельзя переместить письма в папку "Отправленные"'));
             return;
@@ -121,11 +116,13 @@ const Settings = () => {
                     open={Boolean(anchorElUser)}
                     onClose={() => setAnchorElUser(null)}
                 >
-                    {folders.map((folder) => (
-                        <MenuItem key={folder} onClick={() => handleMoveToFolder(folder)}>
-                            <Typography textAlign="center">{folder}</Typography>
-                        </MenuItem>
-                    ))}
+                    {folders
+                        .filter((folder) => folder !== FoldersEnum.Outgoing)
+                        .map((folder) => (
+                            <MenuItem key={folder} onClick={() => handleMoveToFolder(folder)}>
+                                <Typography textAlign="center">{folder}</Typography>
+                            </MenuItem>
+                        ))}
                 </Menu>
                 <IconButton sx={{ borderRadius: '5px' }} onClick={handleMarkReadMessage}>
                     <Typography sx={{ mr: 1 }}>Отметить прочитанным</Typography>

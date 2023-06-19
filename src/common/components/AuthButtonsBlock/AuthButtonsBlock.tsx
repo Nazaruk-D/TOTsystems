@@ -43,7 +43,7 @@ const AuthButtonsBlock = () => {
     };
 
     const homePage = () => {
-        navigate(Path.Root);
+        navigate(Path.Messages);
         handleCloseUserMenu();
     };
 

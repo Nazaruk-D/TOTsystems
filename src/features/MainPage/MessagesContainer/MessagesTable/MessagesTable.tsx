@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Box, Checkbox, Table, TableBody, TableCell, TableContainer, TableHead, TablePagination, TableRow } from '@mui/material';
 import { theme } from '../../../../styles/theme/theme';
 import Message from './Message/Message';
-import SendFormModal from '../../SideBar/NewMessageButton/SendFormModal/SendFormModal';
+import SendFormModal from '../../../../common/components/SideBar/NewMessageButton/SendFormModal/SendFormModal';
 import { useAppDispatch, useAppSelector } from '../../../../hooks/useRedux';
 import { filteredIncomingMessagesSelector } from '../../../../store/selectors/messagesSelector';
 import { changeAllMessagesStatus } from '../../../../store/slices/messagesSlice';
@@ -67,7 +67,7 @@ const MessagesTable = () => {
                             </TableCell>
                         </TableRow>
                     </TableHead>
-                    {slicedMessages.length ? (
+                    {slicedMessages.length > 0 ? (
                         <TableBody>
                             {slicedMessages.map((message) => (
                                 <Message key={message.id} message={message} />

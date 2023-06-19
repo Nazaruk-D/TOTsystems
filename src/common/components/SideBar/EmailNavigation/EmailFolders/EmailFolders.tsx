@@ -1,4 +1,5 @@
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
 import { Box, Divider, List } from '@mui/material';
 import InboxIcon from '@mui/icons-material/Inbox';
 import DraftsIcon from '@mui/icons-material/Drafts';
@@ -7,12 +8,14 @@ import { useAppDispatch, useAppSelector } from '../../../../../hooks/useRedux';
 import { FoldersEnum } from '../../../../../enums/foldersEnum';
 import { setFolderName } from '../../../../../store/slices/userSlice';
 import { userFoldersSelector, userIdSelector } from '../../../../../store/selectors/userSelector';
-import SideBarButton from '../../../../../common/components/SideBarButton/SideBarButton';
 import { clearAllMessagesStatus } from '../../../../../store/slices/messagesSlice';
 import { useDeleteFolderMutation } from '../../../../../store/api/userAPISlice';
+import SideBarButton from '../../../SideBarButton/SideBarButton';
+import { Path } from '../../../../../enums/path';
 
 const EmailFolders = () => {
     const dispatch = useAppDispatch();
+    const navigate = useNavigate();
     const userFolders = useAppSelector(userFoldersSelector);
     const userId = useAppSelector(userIdSelector);
     const [deleteFolder] = useDeleteFolderMutation();
@@ -20,6 +23,9 @@ const EmailFolders = () => {
     const onChangeFolder = (folderName: string) => {
         dispatch(setFolderName(folderName));
         dispatch(clearAllMessagesStatus());
+        if (!window.location.href.includes(Path.Messages)) {
+            navigate(Path.Messages);
+        }
     };
 
     const deleteFolderHandler = (nameFolder: string) => {
@@ -54,15 +60,16 @@ const EmailFolders = () => {
             <List>
                 <SideBarButton folderName={FoldersEnum.Remote} onChangeFolder={onChangeFolder} isBaseFolder />
                 <SideBarButton folderName={FoldersEnum.Spam} onChangeFolder={onChangeFolder} isBaseFolder />
-                {userFolders.map((folder) => (
-                    <SideBarButton
-                        key={folder}
-                        folderName={folder}
-                        onChangeFolder={onChangeFolder}
-                        isBaseFolder={false}
-                        deleteFolder={deleteFolderHandler}
-                    />
-                ))}
+                {userFolders &&
+                    userFolders.map((folder) => (
+                        <SideBarButton
+                            key={folder}
+                            folderName={folder}
+                            onChangeFolder={onChangeFolder}
+                            isBaseFolder={false}
+                            deleteFolder={deleteFolderHandler}
+                        />
+                    ))}
             </List>
         </Box>
     );
