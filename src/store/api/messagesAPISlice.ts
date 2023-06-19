@@ -5,6 +5,7 @@ import { SendMessageType } from '../../types/SendMessageType';
 import { FolderActionType } from '../../types/FolderActionType';
 import { TagType } from '../../enums/tagType';
 import { FetchMessagesType } from '../../types/FetchMessagesType';
+import { DeleteMessageType } from '../../types/DeleteMessageType';
 
 export const messagesAPISlice = createApi({
     reducerPath: 'messagesAPI',
@@ -34,11 +35,11 @@ export const messagesAPISlice = createApi({
             }),
             invalidatesTags: [TagType.Message],
         }),
-        deleteMessage: builder.mutation<ResponseType, { ids: string[] }>({
-            query: (ids) => ({
-                url: `${PathAPI.Message}`,
-                method: 'DELETE',
-                body: { ids },
+        deleteMessage: builder.mutation<ResponseType, DeleteMessageType>({
+            query: ({ messagesId }) => ({
+                url: `${PathAPI.Message}/incoming`,
+                method: 'PUT',
+                body: { messagesId },
             }),
             invalidatesTags: [TagType.Message],
         }),

@@ -3,14 +3,23 @@ import { Grid, IconButton, Menu, MenuItem, Typography } from '@mui/material';
 import { DeleteOutlined, FolderOutlined, MarkunreadOutlined } from '@mui/icons-material';
 import { theme } from '../../../../styles/theme/theme';
 import { useAppDispatch, useAppSelector } from '../../../../hooks/useRedux';
-import { selectorIsActiveFolder, userEmailSelector, userFoldersSelector } from '../../../../store/selectors/userSelector';
+import {
+    selectorIsActiveFolder,
+    userEmailSelector,
+    userFoldersSelector,
+    userIdSelector,
+} from '../../../../store/selectors/userSelector';
 import { mainFolders } from '../../../../common/constant/folders';
 import {
     incomingCheckedIdMessagesSelector,
     outgoingCheckedIdMessagesSelector,
 } from '../../../../store/selectors/messagesSelector';
 import { FoldersEnum } from '../../../../enums/foldersEnum';
-import { useChangeMessagesFolderMutation, useFetchMessagesQuery } from '../../../../store/api/messagesAPISlice';
+import {
+    useChangeMessagesFolderMutation,
+    useDeleteMessageMutation,
+    useFetchMessagesQuery,
+} from '../../../../store/api/messagesAPISlice';
 import { setAppErrorAC } from '../../../../store/slices/appSlice';
 import { setMessages } from '../../../../store/slices/messagesSlice';
 
@@ -21,9 +30,11 @@ const Settings = () => {
     const incomingIdCheckedMessages = useAppSelector(incomingCheckedIdMessagesSelector);
     const outgoingIdCheckedMessages = useAppSelector(outgoingCheckedIdMessagesSelector);
     const userEmail = useAppSelector(userEmailSelector);
+    const userId = useAppSelector(userIdSelector);
     const [anchorElUser, setAnchorElUser] = React.useState<null | HTMLElement>(null);
     const folders = [...mainFolders, ...userFolders];
     const [changeMessagesFolder] = useChangeMessagesFolderMutation();
+    const [deleteMessages] = useDeleteMessageMutation();
     const { data, isSuccess, error } = useFetchMessagesQuery({ userEmail });
 
     useEffect(() => {
@@ -53,7 +64,10 @@ const Settings = () => {
         }
     };
 
-    const handleDelete = () => {};
+    const handleDeleteMessages = () => {
+        const messagesId = [...incomingIdCheckedMessages, ...outgoingIdCheckedMessages];
+        deleteMessages({ messagesId });
+    };
 
     const handleMarkUnread = () => {};
 
@@ -72,7 +86,7 @@ const Settings = () => {
             }}
         >
             <Grid item md={8.5}>
-                <IconButton sx={{ borderRadius: '5px' }}>
+                <IconButton sx={{ borderRadius: '5px' }} onClick={handleDeleteMessages}>
                     <Typography sx={{ mr: 1 }}>Удалить</Typography>
                     <DeleteOutlined />
                 </IconButton>
