@@ -33,6 +33,9 @@ const userSlice = createSlice({
         setUserData(state, action: PayloadAction<UserType>) {
             state.userData = action.payload;
         },
+        setUserFolders(state, action: PayloadAction<string[]>) {
+            state.userData.folders = action.payload;
+        },
         clearUserData(state) {
             state.userData = {
                 id: null,
@@ -45,6 +48,6 @@ const userSlice = createSlice({
     },
 });
 
-export const { setFolderName, setIsLoggedIn, setUserData, clearUserData } = userSlice.actions;
+export const { setFolderName, setIsLoggedIn, setUserData, clearUserData, setUserFolders } = userSlice.actions;
 
 export default userSlice.reducer;

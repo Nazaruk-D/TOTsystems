@@ -1,9 +1,8 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/dist/query/react';
-import { MessageType } from '../../types/MessageType';
 import { ResponseType } from '../../types/ResponseType';
-import { SendMessageType } from '../../types/SendMessageType';
 import { PathAPI } from '../../enums/PathAPI';
 import { CreateFolderType } from '../../types/CreateFolderType';
+import { TagType } from '../../enums/tagType';
 
 export const userAPISlice = createApi({
     reducerPath: 'userAPI',
@@ -11,9 +10,11 @@ export const userAPISlice = createApi({
         baseUrl: process.env.REACT_APP_REMOTE_BASE_URL,
         credentials: 'include',
     }),
+    tagTypes: [TagType.Folder],
     endpoints: (builder) => ({
-        getMessages: builder.query<ResponseType<MessageType>, { userId: string }>({
-            query: ({ userId }) => `userId`,
+        getFolders: builder.query<ResponseType<{ folders: string[] }>, { userId: number | null }>({
+            query: ({ userId }) => `${PathAPI.Folder}/${userId}`,
+            providesTags: [TagType.Folder],
         }),
         createFolder: builder.mutation<ResponseType, CreateFolderType>({
             query: ({ nameFolder, userId }) => ({
@@ -21,8 +22,16 @@ export const userAPISlice = createApi({
                 method: 'POST',
                 body: { nameFolder, userId },
             }),
+            invalidatesTags: [TagType.Folder],
+        }),
+        deleteFolder: builder.mutation<ResponseType, { userId: number; nameFolder: string }>({
+            query: ({ userId, nameFolder }) => ({
+                url: `${PathAPI.Folder}/${userId}/${nameFolder}`,
+                method: 'DELETE',
+            }),
+            invalidatesTags: [TagType.Folder],
         }),
     }),
 });
 
-export const { useGetMessagesQuery, useCreateFolderMutation } = userAPISlice;
+export const { useGetFoldersQuery, useCreateFolderMutation, useDeleteFolderMutation } = userAPISlice;

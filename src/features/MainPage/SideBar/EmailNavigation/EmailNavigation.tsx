@@ -1,13 +1,24 @@
-import React from 'react';
-import { Box, Button, Divider, Grid, List, ListItem, ListItemButton, ListItemIcon, ListItemText } from '@mui/material';
-import InboxIcon from '@mui/icons-material/Inbox';
-import DraftsIcon from '@mui/icons-material/Drafts';
-import ArchiveOutlinedIcon from '@mui/icons-material/ArchiveOutlined';
+import React, { useEffect } from 'react';
+import { Grid } from '@mui/material';
 import { theme } from '../../../../styles/theme/theme';
 import EmailFolders from './EmailFolders/EmailFolders';
 import CreateFolder from './CreateFolder/CreateFolder';
+import { useGetFoldersQuery } from '../../../../store/api/userAPISlice';
+import { useAppDispatch, useAppSelector } from '../../../../hooks/useRedux';
+import { userIdSelector } from '../../../../store/selectors/userSelector';
+import { setUserFolders } from '../../../../store/slices/userSlice';
 
 const EmailNavigation = () => {
+    const dispatch = useAppDispatch();
+    const userId = useAppSelector(userIdSelector);
+    const { data, error, isSuccess } = useGetFoldersQuery({ userId });
+
+    useEffect(() => {
+        if (data) {
+            dispatch(setUserFolders(data.data.folders));
+        }
+    }, [data, error, isSuccess]);
+
     return (
         <Grid
             sx={{

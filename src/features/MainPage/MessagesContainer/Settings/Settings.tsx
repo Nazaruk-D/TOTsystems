@@ -42,9 +42,11 @@ const Settings = () => {
         const isOutgoing = isActiveFolder === FoldersEnum.Outgoing;
         if (isOutgoing) {
             dispatch(setAppErrorAC('Нельзя переместить письма из папки "Отправленные"'));
+            return;
         }
         if (folder === FoldersEnum.Outgoing) {
             dispatch(setAppErrorAC('Нельзя переместить письма в папку "Отправленные"'));
+            return;
         }
         if (incomingIdCheckedMessages.length > 0 && !isOutgoing) {
             await changeMessagesFolder({ folder, messagesId: incomingIdCheckedMessages });

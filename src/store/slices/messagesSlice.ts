@@ -45,8 +45,6 @@ const messagesSlice = createSlice({
         },
         setMessages(state, action: PayloadAction<{ incomingMessages: MessageType[]; outgoingMessages: MessageType[] }>) {
             const { incomingMessages, outgoingMessages } = action.payload;
-            console.log(incomingMessages);
-            console.log(outgoingMessages);
             state.incomingMessages = incomingMessages;
             state.outgoingMessages = outgoingMessages;
         },
