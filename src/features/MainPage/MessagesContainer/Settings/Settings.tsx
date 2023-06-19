@@ -19,6 +19,7 @@ import {
     useChangeMessagesFolderMutation,
     useDeleteMessageMutation,
     useFetchMessagesQuery,
+    useMarkReadMessagesMutation,
 } from '../../../../store/api/messagesAPISlice';
 import { setAppErrorAC } from '../../../../store/slices/appSlice';
 import { setMessages } from '../../../../store/slices/messagesSlice';
@@ -35,7 +36,10 @@ const Settings = () => {
     const folders = [...mainFolders, ...userFolders];
     const [changeMessagesFolder] = useChangeMessagesFolderMutation();
     const [deleteMessages] = useDeleteMessageMutation();
+    const [markMessages] = useMarkReadMessagesMutation();
     const { data, isSuccess, error } = useFetchMessagesQuery({ userEmail });
+    const isOutgoing = isActiveFolder === FoldersEnum.Outgoing;
+    const messagesId = [...incomingIdCheckedMessages, ...outgoingIdCheckedMessages];
 
     useEffect(() => {
         if (data && !error) {
@@ -50,7 +54,6 @@ const Settings = () => {
     }, [dispatch, data, error, isSuccess]);
 
     const handleMoveToFolder = async (folder: string) => {
-        const isOutgoing = isActiveFolder === FoldersEnum.Outgoing;
         if (isOutgoing) {
             dispatch(setAppErrorAC('Нельзя переместить письма из папки "Отправленные"'));
             return;
@@ -65,11 +68,19 @@ const Settings = () => {
     };
 
     const handleDeleteMessages = () => {
-        const messagesId = [...incomingIdCheckedMessages, ...outgoingIdCheckedMessages];
-        deleteMessages({ messagesId });
+        if (messagesId.length > 0) {
+            deleteMessages({ messagesId });
+        }
     };
 
-    const handleMarkUnread = () => {};
+    const handleMarkReadMessage = () => {
+        if (isOutgoing) {
+            return;
+        }
+        if (messagesId.length > 0) {
+            markMessages({ messagesId });
+        }
+    };
 
     return (
         <Grid
@@ -116,7 +127,7 @@ const Settings = () => {
                         </MenuItem>
                     ))}
                 </Menu>
-                <IconButton sx={{ borderRadius: '5px' }}>
+                <IconButton sx={{ borderRadius: '5px' }} onClick={handleMarkReadMessage}>
                     <Typography sx={{ mr: 1 }}>Отметить прочитанным</Typography>
                     <MarkunreadOutlined />
                 </IconButton>

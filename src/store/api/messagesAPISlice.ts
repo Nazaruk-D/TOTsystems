@@ -35,9 +35,17 @@ export const messagesAPISlice = createApi({
             }),
             invalidatesTags: [TagType.Message],
         }),
-        deleteMessage: builder.mutation<ResponseType, DeleteMessageType>({
+        deleteMessage: builder.mutation<ResponseType, { messagesId: number[] }>({
             query: ({ messagesId }) => ({
                 url: `${PathAPI.Message}/incoming`,
+                method: 'PUT',
+                body: { messagesId },
+            }),
+            invalidatesTags: [TagType.Message],
+        }),
+        markReadMessages: builder.mutation<ResponseType, { messagesId: number[] }>({
+            query: ({ messagesId }) => ({
+                url: `${PathAPI.Message}/mark`,
                 method: 'PUT',
                 body: { messagesId },
             }),
@@ -46,5 +54,10 @@ export const messagesAPISlice = createApi({
     }),
 });
 
-export const { useFetchMessagesQuery, useSendMessageMutation, useDeleteMessageMutation, useChangeMessagesFolderMutation } =
-    messagesAPISlice;
+export const {
+    useFetchMessagesQuery,
+    useSendMessageMutation,
+    useDeleteMessageMutation,
+    useChangeMessagesFolderMutation,
+    useMarkReadMessagesMutation,
+} = messagesAPISlice;

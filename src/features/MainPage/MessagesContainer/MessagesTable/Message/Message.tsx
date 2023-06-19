@@ -2,8 +2,10 @@ import React from 'react';
 import dateFormat from 'dateformat';
 import { Checkbox, TableCell, TableRow } from '@mui/material';
 import { MessageType } from '../../../../../types/MessageType';
-import { useAppDispatch } from '../../../../../hooks/useRedux';
+import { useAppDispatch, useAppSelector } from '../../../../../hooks/useRedux';
 import { changeMessageStatus } from '../../../../../store/slices/messagesSlice';
+import { selectorIsActiveFolder } from '../../../../../store/selectors/userSelector';
+import { FoldersEnum } from '../../../../../enums/foldersEnum';
 
 type MessagePropsType = {
     message: MessageType;
@@ -11,9 +13,14 @@ type MessagePropsType = {
 
 const Message: React.FC<MessagePropsType> = ({ message }) => {
     const dispatch = useAppDispatch();
+    const activeFolder = useAppSelector(selectorIsActiveFolder);
+    const isUnread = !message.is_read;
+    const unreadStyleText = { fontWeight: isUnread && activeFolder !== FoldersEnum.Outgoing ? '800' : '400' };
+
     const onChangeStatusHandler = (id: number, status: boolean) => {
         dispatch(changeMessageStatus({ id, status }));
     };
+
     return (
         <TableRow
             sx={{
@@ -32,16 +39,16 @@ const Message: React.FC<MessagePropsType> = ({ message }) => {
                     sx={{ color: message.is_selected ? 'black' : 'gray' }}
                 />
             </TableCell>
-            <TableCell component="th" scope="row">
+            <TableCell component="th" scope="row" sx={unreadStyleText}>
                 {message.sender.name}
             </TableCell>
-            <TableCell component="th" scope="row">
+            <TableCell component="th" scope="row" sx={unreadStyleText}>
                 {message.subject}
             </TableCell>
-            <TableCell component="th" scope="row">
+            <TableCell component="th" scope="row" sx={unreadStyleText}>
                 {message.message}
             </TableCell>
-            <TableCell component="th" scope="row">
+            <TableCell component="th" scope="row" sx={unreadStyleText}>
                 {dateFormat(message.created_at)}
             </TableCell>
         </TableRow>
