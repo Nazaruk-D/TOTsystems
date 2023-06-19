@@ -36,17 +36,24 @@ const messagesSlice = createSlice({
                 ids.includes(message.id) ? { ...message, is_selected: status } : message,
             );
         },
+        clearAllMessagesStatus(state) {
+            state.incomingMessages = state.incomingMessages.map((message: MessageType) => ({ ...message, is_selected: false }));
+            state.outgoingMessages = state.outgoingMessages.map((message: MessageType) => ({ ...message, is_selected: false }));
+        },
         setUsers(state, action: PayloadAction<UserType[]>) {
             state.users = action.payload;
         },
         setMessages(state, action: PayloadAction<{ incomingMessages: MessageType[]; outgoingMessages: MessageType[] }>) {
             const { incomingMessages, outgoingMessages } = action.payload;
+            console.log(incomingMessages);
+            console.log(outgoingMessages);
             state.incomingMessages = incomingMessages;
             state.outgoingMessages = outgoingMessages;
         },
     },
 });
 
-export const { changeMessageStatus, changeAllMessagesStatus, setUsers, setMessages } = messagesSlice.actions;
+export const { changeMessageStatus, changeAllMessagesStatus, setUsers, setMessages, clearAllMessagesStatus } =
+    messagesSlice.actions;
 
 export default messagesSlice.reducer;

@@ -1,6 +1,6 @@
 import React from 'react';
 import dateFormat from 'dateformat';
-import { Checkbox, IconButton, TableCell, TableRow } from '@mui/material';
+import { Checkbox, TableCell, TableRow } from '@mui/material';
 import { MessageType } from '../../../../../types/MessageType';
 import { useAppDispatch } from '../../../../../hooks/useRedux';
 import { changeMessageStatus } from '../../../../../store/slices/messagesSlice';

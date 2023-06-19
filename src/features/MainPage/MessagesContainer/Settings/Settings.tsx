@@ -1,21 +1,57 @@
-import React from 'react';
-import { Box, Grid, IconButton, Menu, MenuItem, Typography } from '@mui/material';
+import React, { useEffect } from 'react';
+import { Grid, IconButton, Menu, MenuItem, Typography } from '@mui/material';
 import { DeleteOutlined, FolderOutlined, MarkunreadOutlined } from '@mui/icons-material';
 import { theme } from '../../../../styles/theme/theme';
 import { useAppDispatch, useAppSelector } from '../../../../hooks/useRedux';
-import { selectorIsActiveFolder, userFoldersSelector } from '../../../../store/selectors/userSelector';
+import { selectorIsActiveFolder, userEmailSelector, userFoldersSelector } from '../../../../store/selectors/userSelector';
 import { mainFolders } from '../../../../common/constant/folders';
+import {
+    incomingCheckedIdMessagesSelector,
+    outgoingCheckedIdMessagesSelector,
+} from '../../../../store/selectors/messagesSelector';
+import { FoldersEnum } from '../../../../enums/foldersEnum';
+import { useChangeMessagesFolderMutation, useFetchMessagesQuery } from '../../../../store/api/messagesAPISlice';
+import { setAppErrorAC } from '../../../../store/slices/appSlice';
+import { setMessages } from '../../../../store/slices/messagesSlice';
 
 const Settings = () => {
     const dispatch = useAppDispatch();
     const isActiveFolder = useAppSelector(selectorIsActiveFolder);
     const userFolders = useAppSelector(userFoldersSelector);
+    const incomingIdCheckedMessages = useAppSelector(incomingCheckedIdMessagesSelector);
+    const outgoingIdCheckedMessages = useAppSelector(outgoingCheckedIdMessagesSelector);
+    const userEmail = useAppSelector(userEmailSelector);
     const [anchorElUser, setAnchorElUser] = React.useState<null | HTMLElement>(null);
     const folders = [...mainFolders, ...userFolders];
+    const [changeMessagesFolder] = useChangeMessagesFolderMutation();
+    const { data, isSuccess, error } = useFetchMessagesQuery({ userEmail });
+
+    useEffect(() => {
+        if (data && !error) {
+            const { messages } = data.data;
+            if (messages) {
+                dispatch(setMessages({ incomingMessages: messages.incoming, outgoingMessages: messages.outgoing }));
+            }
+        }
+        if (isSuccess) {
+            setAnchorElUser(null);
+        }
+    }, [dispatch, data, error, isSuccess]);
+
+    const handleMoveToFolder = async (folder: string) => {
+        const isOutgoing = isActiveFolder === FoldersEnum.Outgoing;
+        if (isOutgoing) {
+            dispatch(setAppErrorAC('Нельзя переместить письма из папки "Отправленные"'));
+        }
+        if (folder === FoldersEnum.Outgoing) {
+            dispatch(setAppErrorAC('Нельзя переместить письма в папку "Отправленные"'));
+        }
+        if (incomingIdCheckedMessages.length > 0 && !isOutgoing) {
+            await changeMessagesFolder({ folder, messagesId: incomingIdCheckedMessages });
+        }
+    };
 
     const handleDelete = () => {};
-
-    const handleMoveToFolder = () => {};
 
     const handleMarkUnread = () => {};
 
@@ -59,7 +95,7 @@ const Settings = () => {
                     onClose={() => setAnchorElUser(null)}
                 >
                     {folders.map((folder) => (
-                        <MenuItem onClick={() => {}}>
+                        <MenuItem key={folder} onClick={() => handleMoveToFolder(folder)}>
                             <Typography textAlign="center">{folder}</Typography>
                         </MenuItem>
                     ))}

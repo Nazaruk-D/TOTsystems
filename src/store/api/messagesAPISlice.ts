@@ -1,11 +1,10 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/dist/query/react';
 import { ResponseType } from '../../types/ResponseType';
-import { LoginType, RegistrationType } from '../../types/AuthType';
 import { PathAPI } from '../../enums/PathAPI';
-import { MessageType } from '../../types/MessageType';
-import { UserType } from '../../types/UserType';
-import { ServerData } from '../../types/ServerData';
 import { SendMessageType } from '../../types/SendMessageType';
+import { FolderActionType } from '../../types/FolderActionType';
+import { TagType } from '../../enums/tagType';
+import { FetchMessagesType } from '../../types/FetchMessagesType';
 
 export const messagesAPISlice = createApi({
     reducerPath: 'messagesAPI',
@@ -13,9 +12,11 @@ export const messagesAPISlice = createApi({
         baseUrl: process.env.REACT_APP_REMOTE_BASE_URL,
         credentials: 'include',
     }),
+    tagTypes: [TagType.Message],
     endpoints: (builder) => ({
-        fetchMessages: builder.query<ResponseType<ServerData>, { userId: string }>({
-            query: ({ userId }) => `${PathAPI.Message}`,
+        fetchMessages: builder.query<ResponseType<FetchMessagesType>, { userEmail: string }>({
+            query: ({ userEmail }) => `${PathAPI.Message}/${userEmail}`,
+            providesTags: [TagType.Message],
         }),
         sendMessage: builder.mutation<ResponseType, SendMessageType>({
             query: ({ sender, recipient, message, subject }) => ({
@@ -23,6 +24,15 @@ export const messagesAPISlice = createApi({
                 method: 'POST',
                 body: { sender, recipient, message, subject },
             }),
+            invalidatesTags: [TagType.Message],
+        }),
+        changeMessagesFolder: builder.mutation<ResponseType, FolderActionType>({
+            query: ({ folder, messagesId }) => ({
+                url: `${PathAPI.Message}`,
+                method: 'PUT',
+                body: { folder, messagesId },
+            }),
+            invalidatesTags: [TagType.Message],
         }),
         deleteMessage: builder.mutation<ResponseType, { ids: string[] }>({
             query: (ids) => ({
@@ -30,9 +40,10 @@ export const messagesAPISlice = createApi({
                 method: 'DELETE',
                 body: { ids },
             }),
+            invalidatesTags: [TagType.Message],
         }),
     }),
 });
 
-export const { useFetchMessagesQuery, useLazyFetchMessagesQuery, useSendMessageMutation, useDeleteMessageMutation } =
+export const { useFetchMessagesQuery, useSendMessageMutation, useDeleteMessageMutation, useChangeMessagesFolderMutation } =
     messagesAPISlice;

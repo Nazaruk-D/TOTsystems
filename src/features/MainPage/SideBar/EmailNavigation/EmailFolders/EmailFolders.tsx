@@ -8,6 +8,7 @@ import { FoldersEnum } from '../../../../../enums/foldersEnum';
 import { setFolderName } from '../../../../../store/slices/userSlice';
 import { userFoldersSelector } from '../../../../../store/selectors/userSelector';
 import SideBarButton from '../../../../../common/components/SideBarButton/SideBarButton';
+import { clearAllMessagesStatus } from '../../../../../store/slices/messagesSlice';
 
 const EmailFolders = () => {
     const dispatch = useAppDispatch();
@@ -15,6 +16,7 @@ const EmailFolders = () => {
 
     const onChangeFolder = (folderName: string) => {
         dispatch(setFolderName(folderName));
+        dispatch(clearAllMessagesStatus());
     };
 
     return (

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Box, Checkbox, Table, TableBody, TableCell, TableContainer, TableHead, TablePagination, TableRow } from '@mui/material';
 import { theme } from '../../../../styles/theme/theme';
 import Message from './Message/Message';
@@ -33,6 +33,10 @@ const MessagesTable = () => {
         dispatch(changeAllMessagesStatus({ ids, status: !isAllMessages }));
         setIsAllMessages(!isAllMessages);
     };
+
+    useEffect(() => {
+        setIsAllMessages(false);
+    }, [selectedFolder]);
 
     return (
         <Box

@@ -13,9 +13,8 @@ function App() {
     const { data, isLoading, error } = useMeQuery({});
 
     if (data && !error) {
-        const { userData, messages, users } = data.data;
+        const { userData, users } = data.data;
         dispatch(setUserData(userData));
-        dispatch(setMessages({ incomingMessages: messages.incoming, outgoingMessages: messages.outgoing }));
         dispatch(setUsers(users));
         dispatch(setIsLoggedIn(true));
     }
