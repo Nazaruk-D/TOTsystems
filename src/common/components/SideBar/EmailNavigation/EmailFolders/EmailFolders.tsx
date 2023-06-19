@@ -12,6 +12,7 @@ import { clearAllMessagesStatus } from '../../../../../store/slices/messagesSlic
 import { useDeleteFolderMutation } from '../../../../../store/api/userAPISlice';
 import SideBarButton from '../../../SideBarButton/SideBarButton';
 import { Path } from '../../../../../enums/path';
+import { setSearchValue } from '../../../../../store/slices/serachSlice';
 
 const EmailFolders = () => {
     const dispatch = useAppDispatch();
@@ -23,6 +24,7 @@ const EmailFolders = () => {
     const onChangeFolder = (folderName: string) => {
         dispatch(setFolderName(folderName));
         dispatch(clearAllMessagesStatus());
+        dispatch(setSearchValue(''));
         if (!window.location.href.includes(Path.Messages)) {
             navigate(Path.Messages);
         }

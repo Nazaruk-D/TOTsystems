@@ -25,6 +25,17 @@ export const outgoingCheckedIdMessagesSelector = (state: AppRootStateType): numb
 };
 
 export const filteredIncomingMessagesSelector = (state: AppRootStateType, selectorIsActiveFolder: string) => {
+    const { searchValue } = state.search;
+    if (searchValue) {
+        if (selectorIsActiveFolder === FoldersEnum.Outgoing) {
+            return state.messages.outgoingMessages.filter(
+                (message) => message.subject.includes(searchValue) || message.message.includes(searchValue),
+            );
+        }
+        return state.messages.incomingMessages
+            .filter((message) => message.folder === selectorIsActiveFolder)
+            .filter((message) => message.subject.includes(searchValue) || message.message.includes(searchValue));
+    }
     if (selectorIsActiveFolder === FoldersEnum.Outgoing) {
         return state.messages.outgoingMessages;
     }

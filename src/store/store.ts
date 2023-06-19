@@ -5,11 +5,13 @@ import { messagesAPISlice } from './api/messagesAPISlice';
 import appReducer from './slices/appSlice';
 import messagesReducer from './slices/messagesSlice';
 import userReducer from './slices/userSlice';
+import searchReducer from './slices/serachSlice';
 
 const rootReducer = combineReducers({
     app: appReducer,
     messages: messagesReducer,
     user: userReducer,
+    search: searchReducer,
     [userAPISlice.reducerPath]: userAPISlice.reducer,
     [authAPISlice.reducerPath]: authAPISlice.reducer,
     [messagesAPISlice.reducerPath]: messagesAPISlice.reducer,

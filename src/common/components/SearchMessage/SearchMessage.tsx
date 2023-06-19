@@ -1,7 +1,9 @@
-import React, { ChangeEvent, FC, useState } from 'react';
+import React, { ChangeEvent, FC, useEffect, useState } from 'react';
 import { InputBase } from '@mui/material';
 import { alpha, styled } from '@mui/material/styles';
 import SearchIcon from '@mui/icons-material/Search';
+import { useAppSelector } from '../../../hooks/useRedux';
+import { searchSelector } from '../../../store/selectors/searchSelecotr';
 
 const Search = styled('div')(({ theme }) => ({
     position: 'relative',
@@ -46,19 +48,18 @@ type SearchReviewPropsType = {
     searchReview: (value: string) => void;
 };
 
-const SearchMail: FC<SearchReviewPropsType> = ({ searchReview }) => {
+const SearchMessage: FC<SearchReviewPropsType> = ({ searchReview }) => {
+    const searchValue = useAppSelector(searchSelector);
     const [value, setValue] = useState('');
 
     const onChangeHandler = (e: ChangeEvent<HTMLInputElement>) => {
         setValue(e.currentTarget.value);
+        searchReview(e.currentTarget.value);
     };
 
-    const onKeyDownHandler = (event: React.KeyboardEvent<HTMLTextAreaElement>) => {
-        if (event.key === 'Enter' && value) {
-            searchReview(value);
-            setValue('');
-        }
-    };
+    useEffect(() => {
+        if (!searchValue) setValue('');
+    }, [searchValue]);
 
     return (
         <Search>
@@ -70,10 +71,9 @@ const SearchMail: FC<SearchReviewPropsType> = ({ searchReview }) => {
                 inputProps={{ 'aria-label': 'search' }}
                 value={value}
                 onChange={onChangeHandler}
-                onKeyDown={onKeyDownHandler}
             />
         </Search>
     );
 };
 
-export default SearchMail;
+export default SearchMessage;
