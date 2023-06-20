@@ -9,7 +9,6 @@ const Introduction = () => {
                 <Typography variant="h1" className={s.title}>
                     Mailbox.
                 </Typography>
-                <Box className={s.description}>Description</Box>
             </Box>
         </Box>
     );

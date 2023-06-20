@@ -7,7 +7,6 @@ import { useAppDispatch, useAppSelector } from '../../../../../hooks/useRedux';
 import { changeMessageStatus } from '../../../../../store/slices/messagesSlice';
 import { selectorIsActiveFolder } from '../../../../../store/selectors/userSelector';
 import { FoldersEnum } from '../../../../../enums/foldersEnum';
-import { Path } from '../../../../../enums/path';
 import { useMarkReadMessagesMutation } from '../../../../../store/api/messagesAPISlice';
 
 type MessagePropsType = {

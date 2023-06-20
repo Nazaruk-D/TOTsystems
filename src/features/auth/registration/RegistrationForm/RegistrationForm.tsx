@@ -51,7 +51,7 @@ const RegistrationForm = () => {
                         textDecoration: 'none',
                     }}
                 >
-                    Sign up
+                    Регистрация
                 </Typography>
                 <form onSubmit={formik.handleSubmit}>
                     <TextField

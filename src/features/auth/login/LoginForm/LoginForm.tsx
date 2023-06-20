@@ -68,7 +68,7 @@ const LoginForm = () => {
                         textDecoration: 'none',
                     }}
                 >
-                    Sign in
+                    Войти
                 </Typography>
                 <form onSubmit={formik.handleSubmit}>
                     <TextField
@@ -102,7 +102,7 @@ const LoginForm = () => {
                         sx={{ mt: '20px' }}
                         disabled={!(formik.isValid && formik.dirty)}
                     >
-                        Sign in
+                        Войти
                     </Button>
                 </form>
                 <Grid container spacing={2} sx={{ mt: '10px' }}>
@@ -110,7 +110,7 @@ const LoginForm = () => {
                         <hr />
                     </Grid>
                     <Grid item xs={2} sx={{ textAlign: 'center' }}>
-                        or
+                        или
                     </Grid>
                     <Grid item xs={5}>
                         <hr />
@@ -123,7 +123,7 @@ const LoginForm = () => {
                     sx={{ mt: '20px' }}
                     onClick={() => navigate(Path.Registration)}
                 >
-                    Sign up
+                    Зарегистрируйтесь
                 </Button>
             </Box>
         </Paper>

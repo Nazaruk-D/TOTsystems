@@ -1,82 +1,10 @@
-import React, { useEffect } from 'react';
-import { Grid, IconButton, Menu, MenuItem, Typography } from '@mui/material';
-import { DeleteOutlined, FolderOutlined, MarkunreadOutlined } from '@mui/icons-material';
+import React from 'react';
+import { Grid } from '@mui/material';
 import { theme } from '../../../../styles/theme/theme';
-import { useAppDispatch, useAppSelector } from '../../../../hooks/useRedux';
-import {
-    selectorIsActiveFolder,
-    userEmailSelector,
-    userFoldersSelector,
-    userIdSelector,
-} from '../../../../store/selectors/userSelector';
-import { mainFolders } from '../../../../common/constant/folders';
-import {
-    incomingCheckedIdMessagesSelector,
-    outgoingCheckedIdMessagesSelector,
-} from '../../../../store/selectors/messagesSelector';
-import { FoldersEnum } from '../../../../enums/foldersEnum';
-import {
-    useChangeMessagesFolderMutation,
-    useDeleteMessageMutation,
-    useFetchMessagesQuery,
-    useMarkReadMessagesMutation,
-} from '../../../../store/api/messagesAPISlice';
-import { setAppErrorAC } from '../../../../store/slices/appSlice';
-import { setMessages } from '../../../../store/slices/messagesSlice';
+import FolderName from './FolderName/FolderName';
+import ActionButton from './ActionButton/ActionButton';
 
 const Settings = () => {
-    const dispatch = useAppDispatch();
-    const isActiveFolder = useAppSelector(selectorIsActiveFolder);
-    const userFolders = useAppSelector(userFoldersSelector);
-    const incomingIdCheckedMessages = useAppSelector(incomingCheckedIdMessagesSelector);
-    const outgoingIdCheckedMessages = useAppSelector(outgoingCheckedIdMessagesSelector);
-    const userEmail = useAppSelector(userEmailSelector);
-    const [anchorElUser, setAnchorElUser] = React.useState<null | HTMLElement>(null);
-    const folders = userFolders ? [...mainFolders, ...userFolders] : mainFolders;
-    const [changeMessagesFolder] = useChangeMessagesFolderMutation();
-    const [deleteMessages] = useDeleteMessageMutation();
-    const [markMessages] = useMarkReadMessagesMutation();
-    const { data, isSuccess, error } = useFetchMessagesQuery({ userEmail });
-    const isOutgoing = isActiveFolder === FoldersEnum.Outgoing;
-    const messagesId = [...incomingIdCheckedMessages, ...outgoingIdCheckedMessages];
-
-    useEffect(() => {
-        if (data && !error) {
-            const { messages } = data.data;
-            if (messages) {
-                dispatch(setMessages({ incomingMessages: messages.incoming, outgoingMessages: messages.outgoing }));
-            }
-        }
-        if (isSuccess) {
-            setAnchorElUser(null);
-        }
-    }, [dispatch, data, error, isSuccess]);
-
-    const handleMoveToFolder = async (folder: string) => {
-        if (folder === FoldersEnum.Outgoing) {
-            dispatch(setAppErrorAC('Нельзя переместить письма в папку "Отправленные"'));
-            return;
-        }
-        if (incomingIdCheckedMessages.length > 0 && !isOutgoing) {
-            await changeMessagesFolder({ folder, messagesId: incomingIdCheckedMessages });
-        }
-    };
-
-    const handleDeleteMessages = () => {
-        if (messagesId.length > 0) {
-            deleteMessages({ messagesId });
-        }
-    };
-
-    const handleMarkReadMessage = () => {
-        if (isOutgoing) {
-            return;
-        }
-        if (messagesId.length > 0) {
-            markMessages({ messagesId });
-        }
-    };
-
     return (
         <Grid
             container
@@ -91,49 +19,8 @@ const Settings = () => {
                 justifyContent: 'space-between',
             }}
         >
-            <Grid item md={8.5}>
-                <IconButton sx={{ borderRadius: '5px' }} onClick={handleDeleteMessages}>
-                    <Typography sx={{ mr: 1 }}>Удалить</Typography>
-                    <DeleteOutlined />
-                </IconButton>
-                <IconButton sx={{ borderRadius: '5px' }} onClick={(event) => setAnchorElUser(event.currentTarget)}>
-                    <Typography sx={{ mr: 1 }}>Переместить</Typography>
-                    <FolderOutlined />
-                </IconButton>
-                <Menu
-                    sx={{ mt: '45px' }}
-                    id="menu-appbar"
-                    anchorEl={anchorElUser}
-                    anchorOrigin={{
-                        vertical: 'top',
-                        horizontal: 'right',
-                    }}
-                    keepMounted
-                    transformOrigin={{
-                        vertical: 'top',
-                        horizontal: 'right',
-                    }}
-                    open={Boolean(anchorElUser)}
-                    onClose={() => setAnchorElUser(null)}
-                >
-                    {folders
-                        .filter((folder) => folder !== FoldersEnum.Outgoing)
-                        .map((folder) => (
-                            <MenuItem key={folder} onClick={() => handleMoveToFolder(folder)}>
-                                <Typography textAlign="center">{folder}</Typography>
-                            </MenuItem>
-                        ))}
-                </Menu>
-                <IconButton sx={{ borderRadius: '5px' }} onClick={handleMarkReadMessage}>
-                    <Typography sx={{ mr: 1 }}>Отметить прочитанным</Typography>
-                    <MarkunreadOutlined />
-                </IconButton>
-            </Grid>
-            <Grid item md={3.5} sx={{ display: 'flex', flexDirection: 'row-reverse' }}>
-                <Typography variant="h5" sx={{ fontWeight: 600 }}>
-                    {isActiveFolder}
-                </Typography>
-            </Grid>
+            <ActionButton />
+            <FolderName />
         </Grid>
     );
 };

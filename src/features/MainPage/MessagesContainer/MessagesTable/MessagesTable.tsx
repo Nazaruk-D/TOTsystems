@@ -1,42 +1,12 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import { Box, Checkbox, Table, TableBody, TableCell, TableContainer, TableHead, TablePagination, TableRow } from '@mui/material';
 import { theme } from '../../../../styles/theme/theme';
 import Message from './Message/Message';
-import SendFormModal from '../../../../common/components/SideBar/NewMessageButton/SendFormModal/SendFormModal';
-import { useAppDispatch, useAppSelector } from '../../../../hooks/useRedux';
-import { filteredIncomingMessagesSelector } from '../../../../store/selectors/messagesSelector';
-import { changeAllMessagesStatus } from '../../../../store/slices/messagesSlice';
-import { selectorIsActiveFolder } from '../../../../store/selectors/userSelector';
-import { MessageType } from '../../../../types/MessageType';
+import { useMessagesTableLogic } from '../../../../hooks/useMessagesTableLogic';
 
 const MessagesTable = () => {
-    const dispatch = useAppDispatch();
-    const selectedFolder = useAppSelector(selectorIsActiveFolder);
-    const filteredMessages = useAppSelector((state) => filteredIncomingMessagesSelector(state, selectedFolder));
-    const [isAllMessages, setIsAllMessages] = useState(false);
-    const [openModal, setOpenModal] = useState(false);
-    const [paginationPage, setPaginationPage] = useState(0);
-    const MESSAGE_PER_PAGE = 9;
-    const paginationRowsPerPage = MESSAGE_PER_PAGE;
-
-    const handleChangePage = (event: React.MouseEvent<HTMLButtonElement, MouseEvent> | null, newPage: number) => {
-        setPaginationPage(newPage);
-    };
-
-    const slicedMessages: MessageType[] = filteredMessages.slice(
-        paginationPage * paginationRowsPerPage,
-        paginationPage * paginationRowsPerPage + paginationRowsPerPage,
-    );
-
-    const onChangeHandler = () => {
-        const ids = slicedMessages.map((message) => message.id);
-        dispatch(changeAllMessagesStatus({ ids, status: !isAllMessages }));
-        setIsAllMessages(!isAllMessages);
-    };
-
-    useEffect(() => {
-        setIsAllMessages(false);
-    }, [selectedFolder]);
+    const { isAllMessages, paginationPage, slicedMessages, paginationRowsPerPage, handleChangePage, onChangeHandler } =
+        useMessagesTableLogic();
 
     return (
         <Box
