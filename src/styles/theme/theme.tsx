@@ -26,5 +26,14 @@ export const theme = createTheme({
                 },
             },
         },
+        MuiTextField: {
+            styleOverrides: {
+                root: {
+                    '& .MuiInputBase-root.Mui-focused': {
+                        borderBottom: '1px solid #676767',
+                    },
+                },
+            },
+        },
     },
 });

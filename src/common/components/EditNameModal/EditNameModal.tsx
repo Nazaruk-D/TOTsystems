@@ -1,5 +1,5 @@
 import React, { FC, useEffect } from 'react';
-import { Button, Grid, Modal, TextField } from '@mui/material';
+import { Button, CircularProgress, Grid, Modal, TextField } from '@mui/material';
 import { useFormik } from 'formik';
 import { Socket } from 'socket.io-client';
 import { DefaultEventsMap } from 'socket.io/dist/typed-events';
@@ -20,7 +20,7 @@ const EditNameModal: FC<SendFormModalPropsType> = ({ openModal, setOpenModal }) 
     const dispatch = useAppDispatch();
     const userName = useAppSelector(userNameSelector);
     const userId = useAppSelector(userIdSelector);
-    const [changeName, { data, isSuccess }] = useUpdateUserNameMutation();
+    const [changeName, { data, isSuccess, isLoading, error }] = useUpdateUserNameMutation();
 
     const formik = useFormik({
         initialValues: {
@@ -59,6 +59,13 @@ const EditNameModal: FC<SendFormModalPropsType> = ({ openModal, setOpenModal }) 
         setOpenModal(false);
     };
 
+    useEffect(() => {
+        if (isSuccess) {
+            setOpenModal(false);
+            formik.resetForm();
+        }
+    }, [isSuccess]);
+
     return (
         <Modal open={openModal} onClose={handleClose} style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
             <Grid
@@ -95,7 +102,7 @@ const EditNameModal: FC<SendFormModalPropsType> = ({ openModal, setOpenModal }) 
                                 endIcon={<SendIcon />}
                                 disabled={!(formik.isValid && formik.dirty)}
                             >
-                                Изменить
+                                {isLoading ? <CircularProgress size={24} color="inherit" /> : 'Изменить'}
                             </Button>
                         </Grid>
                     </Grid>

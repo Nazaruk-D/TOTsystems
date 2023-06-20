@@ -1,5 +1,5 @@
 import React, { FC, useEffect } from 'react';
-import { Autocomplete, Box, Button, Grid, Modal, TextField } from '@mui/material';
+import { Autocomplete, Box, Button, CircularProgress, Grid, Modal, TextField } from '@mui/material';
 import { useFormik } from 'formik';
 import { Socket } from 'socket.io-client';
 import { DefaultEventsMap } from 'socket.io/dist/typed-events';
@@ -18,12 +18,12 @@ type SendFormModalPropsType = {
     ws: Socket<DefaultEventsMap, DefaultEventsMap>;
 };
 
-const SendFormModal: FC<SendFormModalPropsType> = ({ openModal, setOpenModal, ws }) => {
+const SendMessageFormModal: FC<SendFormModalPropsType> = ({ openModal, setOpenModal, ws }) => {
     const dispatch = useAppDispatch();
     const sender = useAppSelector(userEmailSelector);
     const users = useAppSelector(usersSelector);
     const usersEmail = users.map((user) => user.email);
-    const [sendMessage, { isSuccess }] = useSendMessageMutation();
+    const [sendMessage, { isSuccess, isLoading, error }] = useSendMessageMutation();
 
     const formik = useFormik({
         initialValues: {
@@ -64,16 +64,26 @@ const SendFormModal: FC<SendFormModalPropsType> = ({ openModal, setOpenModal, ws
             }
         },
     });
+
+    const handleClose = () => {
+        setOpenModal(false);
+    };
+
+    useEffect(() => {
+        if (error) {
+            if ('data' in error) {
+                const errorData = error.data as { message: string };
+                dispatch(setAppErrorAC(errorData.message));
+            }
+        }
+    }, [error]);
+
     useEffect(() => {
         if (isSuccess) {
             setOpenModal(false);
             formik.resetForm();
         }
     }, [isSuccess]);
-
-    const handleClose = () => {
-        setOpenModal(false);
-    };
 
     return (
         <Modal open={openModal} onClose={handleClose} style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
@@ -147,7 +157,7 @@ const SendFormModal: FC<SendFormModalPropsType> = ({ openModal, setOpenModal, ws
                                 endIcon={<SendIcon />}
                                 disabled={!(formik.isValid && formik.dirty)}
                             >
-                                Отправить
+                                {isLoading ? <CircularProgress size={24} color="inherit" /> : 'Отправить'}
                             </Button>
                         </Grid>
                     </Grid>
@@ -157,4 +167,4 @@ const SendFormModal: FC<SendFormModalPropsType> = ({ openModal, setOpenModal, ws
     );
 };
 
-export default SendFormModal;
+export default SendMessageFormModal;

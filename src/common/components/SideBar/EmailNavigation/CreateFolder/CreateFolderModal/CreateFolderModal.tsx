@@ -1,5 +1,5 @@
 import React, { FC, useEffect } from 'react';
-import { Box, Button, Grid, Modal, TextField } from '@mui/material';
+import { Box, Button, CircularProgress, Grid, Modal, TextField } from '@mui/material';
 import SendIcon from '@mui/icons-material/Send';
 import { useFormik } from 'formik';
 import { theme } from '../../../../../../styles/theme/theme';
@@ -16,7 +16,7 @@ type CreateFolderModalPropsType = {
 const CreateFolderModal: FC<CreateFolderModalPropsType> = ({ openModal, setOpenModal }) => {
     const dispatch = useAppDispatch();
     const userId = useAppSelector(userIdSelector);
-    const [createFolder, { isSuccess }] = useCreateFolderMutation();
+    const [createFolder, { isSuccess, isLoading, error }] = useCreateFolderMutation();
 
     const formik = useFormik({
         initialValues: {
@@ -39,7 +39,7 @@ const CreateFolderModal: FC<CreateFolderModalPropsType> = ({ openModal, setOpenM
                     await createFolder({ nameFolder, userId });
                 }
             } catch {
-                dispatch(setAppErrorAC('Ошибка при создаа новой папки'));
+                dispatch(setAppErrorAC('Ошибка при создании новой папки'));
             }
         },
     });
@@ -47,6 +47,15 @@ const CreateFolderModal: FC<CreateFolderModalPropsType> = ({ openModal, setOpenM
     const handleClose = () => {
         setOpenModal(false);
     };
+
+    useEffect(() => {
+        if (error) {
+            if ('data' in error) {
+                const errorData = error.data as { message: string };
+                dispatch(setAppErrorAC(errorData.message));
+            }
+        }
+    }, [error]);
 
     useEffect(() => {
         if (isSuccess) {
@@ -92,7 +101,7 @@ const CreateFolderModal: FC<CreateFolderModalPropsType> = ({ openModal, setOpenM
                                 endIcon={<SendIcon />}
                                 disabled={!(formik.isValid && formik.dirty)}
                             >
-                                Создать
+                                {isLoading ? <CircularProgress size={24} color="inherit" /> : 'Создать'}
                             </Button>
                         </Grid>
                     </Grid>

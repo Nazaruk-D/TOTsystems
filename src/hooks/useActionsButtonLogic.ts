@@ -1,3 +1,4 @@
+import { useEffect } from 'react';
 import { useAppDispatch, useAppSelector } from './useRedux';
 import { selectorIsActiveFolder, userFoldersSelector } from '../store/selectors/userSelector';
 import { incomingCheckedIdMessagesSelector, outgoingCheckedIdMessagesSelector } from '../store/selectors/messagesSelector';
@@ -17,7 +18,7 @@ const useActionsButtonLogic = () => {
     const outgoingIdCheckedMessages = useAppSelector(outgoingCheckedIdMessagesSelector);
     const isActiveFolder = useAppSelector(selectorIsActiveFolder);
     const folders = userFolders ? [...mainFolders, ...userFolders] : mainFolders;
-    const [changeMessagesFolder] = useChangeMessagesFolderMutation();
+    const [changeMessagesFolder, { error }] = useChangeMessagesFolderMutation();
     const [deleteMessages] = useDeleteMessageMutation();
     const [markMessages] = useMarkReadMessagesMutation();
     const isOutgoing = isActiveFolder === FoldersEnum.Outgoing;
@@ -47,6 +48,15 @@ const useActionsButtonLogic = () => {
             markMessages({ messagesId });
         }
     };
+
+    useEffect(() => {
+        if (error) {
+            if ('data' in error) {
+                const errorData = error.data as { message: string };
+                dispatch(setAppErrorAC(errorData.message));
+            }
+        }
+    }, [error]);
 
     return {
         handleDeleteMessages,

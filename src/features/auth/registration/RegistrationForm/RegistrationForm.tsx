@@ -13,8 +13,7 @@ import { setIsLoggedIn } from '../../../../store/slices/userSlice';
 const RegistrationForm = () => {
     const dispatch = useAppDispatch();
     const navigate = useNavigate();
-    const [inProgress, setInProgress] = useState(false);
-    const [sendRegistrationData, { data, error }] = useRegistrationMutation();
+    const [sendRegistrationData, { data, error, isLoading }] = useRegistrationMutation();
 
     const formik = useFormik({
         initialValues: {
@@ -31,7 +30,6 @@ const RegistrationForm = () => {
                 navigate(Path.Login);
             } catch {
                 dispatch(setAppErrorAC('error registered'));
-                setInProgress(false);
             }
         },
     });
@@ -104,7 +102,7 @@ const RegistrationForm = () => {
                         sx={{ mt: '10px' }}
                         disabled={!(formik.isValid && formik.dirty)}
                     >
-                        {inProgress ? <CircularProgress size={24} color="inherit" /> : 'Sign up'}
+                        {isLoading ? <CircularProgress size={24} color="inherit" /> : 'Sign up'}
                     </Button>
                 </form>
             </Box>

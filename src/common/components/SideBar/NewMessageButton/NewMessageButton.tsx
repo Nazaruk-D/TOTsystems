@@ -3,7 +3,7 @@ import { Box, Button } from '@mui/material';
 import io, { Socket } from 'socket.io-client';
 import { DefaultEventsMap } from 'socket.io/dist/typed-events';
 import { useSnackbar } from 'notistack';
-import SendFormModal from './SendFormModal/SendFormModal';
+import SendMessageFormModal from './SendFormModal/SendMessageFormModal';
 import { useAppSelector } from '../../../../hooks/useRedux';
 import { isLoggedInSelector, userEmailSelector } from '../../../../store/selectors/userSelector';
 import { useLazyFetchMessagesQuery } from '../../../../store/api/messagesAPISlice';
@@ -75,7 +75,7 @@ const NewMessageButton = () => {
             >
                 Новое сообщение
             </Button>
-            <SendFormModal openModal={isActive} setOpenModal={setIsActive} ws={ws!} />
+            <SendMessageFormModal openModal={isActive} setOpenModal={setIsActive} ws={ws!} />
         </>
     );
 };

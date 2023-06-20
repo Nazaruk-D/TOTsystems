@@ -1,14 +1,21 @@
 import React from 'react';
-import { Box, Grid, Typography } from '@mui/material';
+import { Box, Button, Grid, IconButton, Typography } from '@mui/material';
+import { useNavigate, useParams } from 'react-router-dom';
 import dateFormat from 'dateformat';
-import { useParams } from 'react-router-dom';
+import KeyboardReturnIcon from '@mui/icons-material/KeyboardReturn';
 import { theme } from '../../../styles/theme/theme';
 import { useAppSelector } from '../../../hooks/useRedux';
 import { messageSelector } from '../../../store/selectors/messagesSelector';
+import { Path } from '../../../enums/path';
 
 const MessageDetails = () => {
+    const navigate = useNavigate();
     const { messageId = '' } = useParams<string>();
     const message = useAppSelector((state) => messageSelector(state, +messageId));
+
+    const handleGoBack = () => {
+        navigate(Path.Messages);
+    };
 
     if (!message) {
         return <Typography variant="h6">Сообщение не найдено</Typography>;
@@ -26,6 +33,9 @@ const MessageDetails = () => {
                     padding: '1rem',
                 }}
             >
+                <IconButton onClick={handleGoBack} sx={{ marginBottom: 1 }}>
+                    <KeyboardReturnIcon />
+                </IconButton>
                 <Typography variant="h6" sx={{ marginBottom: '0.5rem' }}>
                     {subject}
                 </Typography>
