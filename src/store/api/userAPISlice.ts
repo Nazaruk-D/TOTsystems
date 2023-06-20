@@ -3,6 +3,7 @@ import { ResponseType } from '../../types/ResponseType';
 import { PathAPI } from '../../enums/PathAPI';
 import { CreateFolderType } from '../../types/CreateFolderType';
 import { TagType } from '../../enums/tagType';
+import { UserType } from '../../types/UserType';
 
 export const userAPISlice = createApi({
     reducerPath: 'userAPI',
@@ -31,7 +32,14 @@ export const userAPISlice = createApi({
             }),
             invalidatesTags: [TagType.Folder],
         }),
+        updateUserName: builder.mutation<ResponseType<UserType>, { userId: number; userName: string }>({
+            query: ({ userId, userName }) => ({
+                url: `${PathAPI.UserName}`,
+                method: 'PUT',
+                body: { userId, userName },
+            }),
+        }),
     }),
 });
 
-export const { useGetFoldersQuery, useCreateFolderMutation, useDeleteFolderMutation } = userAPISlice;
+export const { useGetFoldersQuery, useCreateFolderMutation, useDeleteFolderMutation, useUpdateUserNameMutation } = userAPISlice;
