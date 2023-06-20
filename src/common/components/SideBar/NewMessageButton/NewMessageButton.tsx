@@ -55,14 +55,14 @@ const NewMessageButton = () => {
     }, [ws]);
 
     useEffect(() => {
-        if (!ws) {
+        if (!ws && isLoggedIn) {
             const socket = io(remoteWebSocketBaseUrl!);
             setWs(socket);
         }
         return () => {
             ws?.disconnect();
         };
-    }, []);
+    }, [isLoggedIn]);
 
     return (
         <>
