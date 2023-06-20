@@ -7,7 +7,7 @@ import { Path } from '../enums/path';
 import { clearUserData, setIsLoggedIn } from '../store/slices/userSlice';
 import { setUsers } from '../store/slices/messagesSlice';
 
-export const useAuthButtonsBlockLogic = () => {
+export const useHeaderButtonsBlockLogic = () => {
     const dispatch = useAppDispatch();
     const navigate = useNavigate();
     const location = useLocation();

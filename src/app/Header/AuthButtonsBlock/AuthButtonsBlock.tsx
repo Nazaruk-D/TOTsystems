@@ -1,6 +1,6 @@
 import React from 'react';
 import { Box, Button } from '@mui/material';
-import { useAuthButtonsBlockLogic } from '../../../hooks/useAuthButtonsBlockLogic';
+import { useHeaderButtonsBlockLogic } from '../../../hooks/useHeaderButtonsBlockLogic';
 import UserMenu from './UserMenu/UserMenu';
 import UserAvatarButton from './UserAvatarButton/UserAvatarButton';
 
@@ -15,7 +15,7 @@ const AuthButtonsBlock = () => {
         profilePage,
         logoutHandler,
         homePage,
-    } = useAuthButtonsBlockLogic();
+    } = useHeaderButtonsBlockLogic();
 
     return isLoggedIn ? (
         <Box sx={{ flexGrow: 0 }}>

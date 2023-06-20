@@ -1,8 +1,6 @@
 import React, { FC, useEffect } from 'react';
 import { Button, CircularProgress, Grid, Modal, TextField } from '@mui/material';
 import { useFormik } from 'formik';
-import { Socket } from 'socket.io-client';
-import { DefaultEventsMap } from 'socket.io/dist/typed-events';
 import SendIcon from '@mui/icons-material/Send';
 import { setAppErrorAC } from '../../../store/slices/appSlice';
 import { theme } from '../../../styles/theme/theme';
@@ -20,7 +18,7 @@ const EditNameModal: FC<SendFormModalPropsType> = ({ openModal, setOpenModal }) 
     const dispatch = useAppDispatch();
     const userName = useAppSelector(userNameSelector);
     const userId = useAppSelector(userIdSelector);
-    const [changeName, { data, isSuccess, isLoading, error }] = useUpdateUserNameMutation();
+    const [changeName, { data, isSuccess, isLoading }] = useUpdateUserNameMutation();
 
     const formik = useFormik({
         initialValues: {

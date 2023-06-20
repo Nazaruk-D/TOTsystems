@@ -5,7 +5,6 @@ import { SendMessageType } from '../../types/SendMessageType';
 import { FolderActionType } from '../../types/FolderActionType';
 import { TagType } from '../../enums/tagType';
 import { FetchMessagesType } from '../../types/FetchMessagesType';
-import { DeleteMessageType } from '../../types/DeleteMessageType';
 
 export const messagesAPISlice = createApi({
     reducerPath: 'messagesAPI',

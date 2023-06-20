@@ -32,12 +32,22 @@ export const filteredIncomingMessagesSelector = createSelector(
         if (searchValue) {
             if (selectorIsActiveFolder === FoldersEnum.Outgoing) {
                 return outgoingMessages.filter(
-                    (message) => message.subject.includes(searchValue) || message.message.includes(searchValue),
+                    (message) =>
+                        message.subject.toLowerCase().includes(searchValue.toLowerCase()) ||
+                        message.message.toLowerCase().includes(searchValue.toLowerCase()) ||
+                        message.recipient.name.toLowerCase().includes(searchValue.toLowerCase()) ||
+                        message.recipient.email.toLowerCase().includes(searchValue.toLowerCase()),
                 );
             }
             return incomingMessages
                 .filter((message) => message.folder === selectorIsActiveFolder)
-                .filter((message) => message.subject.includes(searchValue) || message.message.includes(searchValue));
+                .filter(
+                    (message) =>
+                        message.subject.toLowerCase().includes(searchValue.toLowerCase()) ||
+                        message.message.toLowerCase().includes(searchValue.toLowerCase()) ||
+                        message.sender.name.toLowerCase().includes(searchValue.toLowerCase()) ||
+                        message.sender.email.toLowerCase().includes(searchValue.toLowerCase()),
+                );
         }
         if (selectorIsActiveFolder === FoldersEnum.Outgoing) {
             return outgoingMessages;

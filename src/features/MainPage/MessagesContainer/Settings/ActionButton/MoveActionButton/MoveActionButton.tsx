@@ -1,7 +1,7 @@
 import React, { FC } from 'react';
 import { IconButton, Menu, MenuItem, Typography } from '@mui/material';
 import { FolderOutlined } from '@mui/icons-material';
-import { FoldersEnum } from '../../../../../enums/foldersEnum';
+import { FoldersEnum } from '../../../../../../enums/foldersEnum';
 
 type MoveActionButtonType = {
     folders: string[];

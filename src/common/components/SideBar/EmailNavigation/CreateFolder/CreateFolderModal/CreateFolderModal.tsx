@@ -1,5 +1,5 @@
 import React, { FC, useEffect } from 'react';
-import { Box, Button, CircularProgress, Grid, Modal, TextField } from '@mui/material';
+import { Button, CircularProgress, Grid, Modal, TextField } from '@mui/material';
 import SendIcon from '@mui/icons-material/Send';
 import { useFormik } from 'formik';
 import { theme } from '../../../../../../styles/theme/theme';
