@@ -57,7 +57,7 @@ const CreateFolderModal: FC<CreateFolderModalPropsType> = ({ openModal, setOpenM
 
     return (
         <Modal open={openModal} onClose={handleClose} style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
-            <Box
+            <Grid
                 sx={{
                     position: 'absolute',
                     width: 500,
@@ -66,10 +66,12 @@ const CreateFolderModal: FC<CreateFolderModalPropsType> = ({ openModal, setOpenM
                     padding: theme.spacing(5, 4, 3),
                     outline: 'none',
                 }}
+                xs={11}
+                sm={5}
             >
                 <form onSubmit={formik.handleSubmit}>
                     <Grid container spacing={2}>
-                        <Grid item xs={12}>
+                        <Grid item sx={{ width: '100%' }}>
                             <TextField
                                 fullWidth
                                 label="Введите имя новой папки"
@@ -94,7 +96,7 @@ const CreateFolderModal: FC<CreateFolderModalPropsType> = ({ openModal, setOpenM
                         </Grid>
                     </Grid>
                 </form>
-            </Box>
+            </Grid>
         </Modal>
     );
 };

@@ -8,6 +8,7 @@
   margin-top: 60px;
   @media screen and (max-width: 1150px) {
     @include flex(column, flex-start, center, wrap);
+    height: 550px;
     margin-top: 20px;
   }
 }

@@ -15,7 +15,7 @@ const MessageDetails = () => {
     }
     const { recipient, sender, subject, message: messageText, created_at: createdAt } = message;
     return (
-        <Grid item xs={9} sx={{ width: '80%', height: '100%' }}>
+        <Grid item sm={9} xs={12} sx={{ width: '80%', height: '100%', mb: 1 }}>
             <Box
                 sx={{
                     backgroundColor: theme.palette.primary.main,

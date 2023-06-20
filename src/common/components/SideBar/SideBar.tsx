@@ -5,7 +5,7 @@ import NewMessageButton from './NewMessageButton/NewMessageButton';
 
 const SideBar = () => {
     return (
-        <Grid item xs={2.5}>
+        <Grid item xs={12} sm={2.5}>
             <NewMessageButton />
             <EmailNavigation />
         </Grid>

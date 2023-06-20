@@ -5,7 +5,7 @@ import Settings from './Settings/Settings';
 
 const MessagesContainer = () => {
     return (
-        <Grid item xs={9} sx={{ width: '80%', height: '100%' }}>
+        <Grid item xs={12} sm={9} sx={{ width: '80%', height: '100%' }}>
             <Settings />
             <MessagesTable />
         </Grid>

@@ -68,7 +68,7 @@ const NewMessageButton = () => {
             <Button
                 variant="contained"
                 color="secondary"
-                sx={{ fontSize: '12px', height: '50px', mb: 3 }}
+                sx={{ fontSize: '12px', height: '50px', mb: 2 }}
                 fullWidth
                 onClick={() => setIsActive(!isActive)}
             >

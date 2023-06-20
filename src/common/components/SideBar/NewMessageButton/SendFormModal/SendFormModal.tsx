@@ -77,7 +77,7 @@ const SendFormModal: FC<SendFormModalPropsType> = ({ openModal, setOpenModal, ws
 
     return (
         <Modal open={openModal} onClose={handleClose} style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
-            <Box
+            <Grid
                 sx={{
                     position: 'absolute',
                     width: 500,
@@ -86,6 +86,8 @@ const SendFormModal: FC<SendFormModalPropsType> = ({ openModal, setOpenModal, ws
                     padding: theme.spacing(5, 4, 3),
                     outline: 'none',
                 }}
+                xs={11}
+                sm={5}
             >
                 <form onSubmit={formik.handleSubmit}>
                     <Grid container spacing={2}>
@@ -149,7 +151,7 @@ const SendFormModal: FC<SendFormModalPropsType> = ({ openModal, setOpenModal, ws
                         </Grid>
                     </Grid>
                 </form>
-            </Box>
+            </Grid>
         </Modal>
     );
 };
