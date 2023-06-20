@@ -2,8 +2,6 @@ import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/dist/query/react';
 import { ResponseType } from '../../types/ResponseType';
 import { LoginType, RegistrationType } from '../../types/AuthType';
 import { PathAPI } from '../../enums/PathAPI';
-import { MessageType } from '../../types/MessageType';
-import { UserType } from '../../types/UserType';
 import { ServerData } from '../../types/ServerData';
 
 export const authAPISlice = createApi({
