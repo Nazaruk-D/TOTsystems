@@ -20,7 +20,7 @@ const Message: React.FC<MessagePropsType> = ({ message }) => {
     const [readMessage] = useMarkReadMessagesMutation();
     const isUnread = !message.is_read;
     const unreadStyleText = { fontWeight: isUnread && activeFolder !== FoldersEnum.Outgoing ? '800' : '400' };
-    const truncatedMessage = `${message.message.slice(0, 15)}...`;
+    const truncatedMessage = message.message.length > 15 ? `${message.message.slice(0, 15)}...` : message.message;
 
     const onChangeStatusHandler = (id: number, status: boolean) => {
         dispatch(changeMessageStatus({ id, status }));
