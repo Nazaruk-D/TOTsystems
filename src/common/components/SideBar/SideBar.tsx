@@ -1,5 +1,5 @@
 import React from 'react';
-import { Box, Button, Grid } from '@mui/material';
+import { Grid } from '@mui/material';
 import EmailNavigation from './EmailNavigation/EmailNavigation';
 import NewMessageButton from './NewMessageButton/NewMessageButton';
 

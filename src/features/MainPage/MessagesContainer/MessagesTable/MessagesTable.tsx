@@ -92,7 +92,6 @@ const MessagesTable = () => {
                 page={paginationPage}
                 onPageChange={handleChangePage}
             />
-            <SendFormModal openModal={openModal} setOpenModal={setOpenModal} />
         </Box>
     );
 };

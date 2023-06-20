@@ -1,6 +1,8 @@
 import React, { FC, useEffect } from 'react';
 import { Autocomplete, Box, Button, Grid, Modal, TextField } from '@mui/material';
 import { useFormik } from 'formik';
+import { Socket } from 'socket.io-client';
+import { DefaultEventsMap } from 'socket.io/dist/typed-events';
 import SendIcon from '@mui/icons-material/Send';
 import { MessageErrorType } from '../../../../../types/MessageErrorType';
 import { theme } from '../../../../../styles/theme/theme';
@@ -13,9 +15,10 @@ import { setAppErrorAC } from '../../../../../store/slices/appSlice';
 type SendFormModalPropsType = {
     openModal: boolean;
     setOpenModal: (openModal: boolean) => void;
+    ws: Socket<DefaultEventsMap, DefaultEventsMap>;
 };
 
-const SendFormModal: FC<SendFormModalPropsType> = ({ openModal, setOpenModal }) => {
+const SendFormModal: FC<SendFormModalPropsType> = ({ openModal, setOpenModal, ws }) => {
     const dispatch = useAppDispatch();
     const sender = useAppSelector(userEmailSelector);
     const users = useAppSelector(usersSelector);
@@ -54,8 +57,8 @@ const SendFormModal: FC<SendFormModalPropsType> = ({ openModal, setOpenModal }) 
             try {
                 const { recipient, subject, message } = values;
                 const sendData = { sender, recipient, subject, message };
-                console.log(sender);
                 await sendMessage(sendData);
+                ws.emit('newMessage', { recipientEmail: recipient, message: sendData });
             } catch {
                 dispatch(setAppErrorAC('Ошибка при отправке сообщения'));
             }
