@@ -5,7 +5,7 @@ import { messagesAPISlice } from './api/messagesAPISlice';
 import appReducer from './slices/appSlice';
 import messagesReducer from './slices/messagesSlice';
 import userReducer from './slices/userSlice';
-import searchReducer from './slices/serachSlice';
+import searchReducer from './slices/searchSlice';
 
 const rootReducer = combineReducers({
     app: appReducer,

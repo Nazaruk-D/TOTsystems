@@ -12,7 +12,7 @@ import { clearAllMessagesStatus } from '../../../../../store/slices/messagesSlic
 import { useDeleteFolderMutation } from '../../../../../store/api/userAPISlice';
 import SideBarButton from '../../../SideBarButton/SideBarButton';
 import { Path } from '../../../../../enums/path';
-import { setSearchValue } from '../../../../../store/slices/serachSlice';
+import { setSearchValue } from '../../../../../store/slices/searchSlice';
 
 const EmailFolders = () => {
     const dispatch = useAppDispatch();

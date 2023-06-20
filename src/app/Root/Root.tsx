@@ -15,6 +15,8 @@ const Root = () => {
     useEffect(() => {
         if (isLoggedIn) {
             navigate(Path.Messages);
+        } else {
+            navigate(Path.Login);
         }
     }, []);
 

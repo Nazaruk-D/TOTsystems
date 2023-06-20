@@ -2,7 +2,7 @@ import React from 'react';
 import { Box } from '@mui/material';
 import Logo from '../../../common/components/Logo/Logo';
 import SearchMessage from '../../../common/components/SearchMessage/SearchMessage';
-import { setSearchValue } from '../../../store/slices/serachSlice';
+import { setSearchValue } from '../../../store/slices/searchSlice';
 import { useAppDispatch } from '../../../hooks/useRedux';
 
 const LogoSearch = () => {

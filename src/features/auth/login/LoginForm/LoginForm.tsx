@@ -1,8 +1,8 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import { useFormik } from 'formik';
-import { Box, Button, CircularProgress, Grid, Paper, TextField, Typography } from '@mui/material';
+import { Box, Button, Grid, Paper, TextField, Typography } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
-import { useAppDispatch, useAppSelector } from '../../../../hooks/useRedux';
+import { useAppDispatch } from '../../../../hooks/useRedux';
 import { setAppErrorAC } from '../../../../store/slices/appSlice';
 import { loginValidation } from '../loginValidation';
 import s from './LoginForm.module.scss';
@@ -10,13 +10,11 @@ import { Path } from '../../../../enums/path';
 import { useLoginMutation } from '../../../../store/api/authAPISlice';
 import Loader from '../../../../common/components/Loader/Loader';
 import { setIsLoggedIn, setUserData } from '../../../../store/slices/userSlice';
-import { isLoggedInSelector } from '../../../../store/selectors/userSelector';
-import { setMessages, setUsers } from '../../../../store/slices/messagesSlice';
+import { setUsers } from '../../../../store/slices/messagesSlice';
 
 const LoginForm = () => {
     const navigate = useNavigate();
     const dispatch = useAppDispatch();
-    const isLoggedIn = useAppSelector(isLoggedInSelector);
     const [login, { data, isLoading, error, isSuccess }] = useLoginMutation();
 
     const formik = useFormik({
@@ -42,12 +40,6 @@ const LoginForm = () => {
             dispatch(setIsLoggedIn(true));
         }
     }, [error, data]);
-
-    useEffect(() => {
-        if (isLoggedIn) {
-            navigate(Path.Messages);
-        }
-    }, [isLoggedIn]);
 
     useEffect(() => {
         if (error) {
