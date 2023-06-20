@@ -56,6 +56,7 @@ export const messagesAPISlice = createApi({
 
 export const {
     useFetchMessagesQuery,
+    useLazyFetchMessagesQuery,
     useSendMessageMutation,
     useDeleteMessageMutation,
     useChangeMessagesFolderMutation,

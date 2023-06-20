@@ -45,7 +45,7 @@ const LoginForm = () => {
 
     useEffect(() => {
         if (isLoggedIn) {
-            navigate(Path.Root);
+            navigate(Path.Messages);
         }
     }, [isLoggedIn]);
 

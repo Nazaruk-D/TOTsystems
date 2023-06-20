@@ -1,4 +1,4 @@
-import React, { Fragment, useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { Box, Button } from '@mui/material';
 import io, { Socket } from 'socket.io-client';
 import { DefaultEventsMap } from 'socket.io/dist/typed-events';
@@ -6,8 +6,8 @@ import { useSnackbar } from 'notistack';
 import SendFormModal from './SendFormModal/SendFormModal';
 import { useAppSelector } from '../../../../hooks/useRedux';
 import { userEmailSelector } from '../../../../store/selectors/userSelector';
+import { useLazyFetchMessagesQuery } from '../../../../store/api/messagesAPISlice';
 import { NewMessageWSType } from '../../../../types/NewMessageWSType';
-import CloseButton from '../../CloseButton/CloseButton';
 
 const NewMessageButton = () => {
     const userEmail = useAppSelector(userEmailSelector);
@@ -15,23 +15,20 @@ const NewMessageButton = () => {
     const [ws, setWs] = useState<Socket<DefaultEventsMap, DefaultEventsMap> | null>(null);
     const remoteWebSocketBaseUrl = process.env.REACT_APP_REMOTE_WB_BASE_URL;
     const { enqueueSnackbar, closeSnackbar } = useSnackbar();
+    const [getMessages] = useLazyFetchMessagesQuery();
 
     const handleClickWithAction = useCallback(
         (lastMessage: NewMessageWSType) => {
             enqueueSnackbar(
                 <Box>
-                    <div>
+                    <Box>
                         New message from <strong>{lastMessage.sender}</strong>
-                    </div>
-                    <div>
+                    </Box>
+                    <Box>
                         Subject: <strong>{lastMessage.subject}</strong>
-                    </div>
-                    <div>{lastMessage.message}</div>
+                    </Box>
+                    <Box>{lastMessage.message}</Box>
                 </Box>,
-                {
-                    variant: 'default',
-                    action: (key) => <CloseButton closeSnackbar={closeSnackbar} key={key} />,
-                },
             );
         },
         [enqueueSnackbar, closeSnackbar],
@@ -50,7 +47,7 @@ const NewMessageButton = () => {
     useEffect(() => {
         if (ws) {
             ws.on('newMessage', (data) => {
-                console.log(data);
+                getMessages({ userEmail });
                 handleClickWithAction(data);
             });
         }
