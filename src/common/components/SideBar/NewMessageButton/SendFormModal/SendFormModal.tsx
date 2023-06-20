@@ -78,6 +78,7 @@ const SendFormModal: FC<SendFormModalPropsType> = ({ openModal, setOpenModal, ws
     return (
         <Modal open={openModal} onClose={handleClose} style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
             <Grid
+                item
                 sx={{
                     position: 'absolute',
                     width: 500,

@@ -17,7 +17,7 @@ const LoginForm = () => {
     const navigate = useNavigate();
     const dispatch = useAppDispatch();
     const isLoggedIn = useAppSelector(isLoggedInSelector);
-    const [login, { data, isLoading, error }] = useLoginMutation();
+    const [login, { data, isLoading, error, isSuccess }] = useLoginMutation();
 
     const formik = useFormik({
         initialValues: {
@@ -35,7 +35,7 @@ const LoginForm = () => {
     });
 
     useEffect(() => {
-        if (!error && data) {
+        if (!error && data && isSuccess) {
             const { userData, users } = data.data;
             dispatch(setUserData(userData));
             dispatch(setUsers(users));
@@ -48,6 +48,15 @@ const LoginForm = () => {
             navigate(Path.Messages);
         }
     }, [isLoggedIn]);
+
+    useEffect(() => {
+        if (error) {
+            if ('data' in error) {
+                const errorData = error.data as { message: string };
+                dispatch(setAppErrorAC(errorData.message));
+            }
+        }
+    }, [error]);
 
     if (isLoading) {
         return <Loader />;

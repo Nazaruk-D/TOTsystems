@@ -5,12 +5,13 @@ import { DefaultEventsMap } from 'socket.io/dist/typed-events';
 import { useSnackbar } from 'notistack';
 import SendFormModal from './SendFormModal/SendFormModal';
 import { useAppSelector } from '../../../../hooks/useRedux';
-import { userEmailSelector } from '../../../../store/selectors/userSelector';
+import { isLoggedInSelector, userEmailSelector } from '../../../../store/selectors/userSelector';
 import { useLazyFetchMessagesQuery } from '../../../../store/api/messagesAPISlice';
 import { NewMessageWSType } from '../../../../types/NewMessageWSType';
 
 const NewMessageButton = () => {
     const userEmail = useAppSelector(userEmailSelector);
+    const isLoggedIn = useAppSelector(isLoggedInSelector);
     const [isActive, setIsActive] = useState(false);
     const [ws, setWs] = useState<Socket<DefaultEventsMap, DefaultEventsMap> | null>(null);
     const remoteWebSocketBaseUrl = process.env.REACT_APP_REMOTE_WB_BASE_URL;

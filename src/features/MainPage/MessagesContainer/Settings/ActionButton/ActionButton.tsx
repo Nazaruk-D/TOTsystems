@@ -19,10 +19,10 @@ import {
     incomingCheckedIdMessagesSelector,
     outgoingCheckedIdMessagesSelector,
 } from '../../../../../store/selectors/messagesSelector';
-import useActionButtonLogic from '../../../../../hooks/useActionButtonLogic';
+import useActionsButtonLogic from '../../../../../hooks/useActionsButtonLogic';
 
 const ActionButton = () => {
-    const { handleDeleteMessages, handleMoveToFolder, handleMarkReadMessage, folders } = useActionButtonLogic();
+    const { handleDeleteMessages, handleMoveToFolder, handleMarkReadMessage, folders } = useActionsButtonLogic();
 
     return (
         <Grid item md={8.5}>

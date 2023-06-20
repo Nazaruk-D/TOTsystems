@@ -5,14 +5,14 @@ import EmailFolders from './EmailFolders/EmailFolders';
 import CreateFolder from './CreateFolder/CreateFolder';
 import { useGetFoldersQuery } from '../../../../store/api/userAPISlice';
 import { useAppDispatch, useAppSelector } from '../../../../hooks/useRedux';
-import { userIdSelector } from '../../../../store/selectors/userSelector';
+import { isLoggedInSelector, userIdSelector } from '../../../../store/selectors/userSelector';
 import { setUserFolders } from '../../../../store/slices/userSlice';
 
 const EmailNavigation = () => {
     const dispatch = useAppDispatch();
     const userId = useAppSelector(userIdSelector);
-    const { data, error, isSuccess } = useGetFoldersQuery({ userId });
-
+    const isLoggedIn = useAppSelector(isLoggedInSelector);
+    const { data, error, isSuccess } = useGetFoldersQuery({ userId }, { skip: !isLoggedIn });
     useEffect(() => {
         if (data) {
             dispatch(setUserFolders(data.data.folders));
