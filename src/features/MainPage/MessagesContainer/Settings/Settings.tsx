@@ -10,6 +10,7 @@ const Settings = () => {
             container
             sx={{
                 backgroundColor: theme.palette.primary.main,
+                height: '70px',
                 borderRadius: '7px',
                 boxShadow: `0 0 5px rgba(100,100,100,0.3)`,
                 p: 2,

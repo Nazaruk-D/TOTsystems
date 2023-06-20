@@ -22,7 +22,7 @@ const useActionsButtonLogic = () => {
     const [deleteMessages] = useDeleteMessageMutation();
     const [markMessages] = useMarkReadMessagesMutation();
     const isOutgoing = isActiveFolder === FoldersEnum.Outgoing;
-    const messagesId = [...incomingIdCheckedMessages, ...outgoingIdCheckedMessages];
+    const checkedMessagesId = [...incomingIdCheckedMessages, ...outgoingIdCheckedMessages];
 
     const handleMoveToFolder = async (folder: string) => {
         if (folder === FoldersEnum.Outgoing) {
@@ -35,17 +35,14 @@ const useActionsButtonLogic = () => {
     };
 
     const handleDeleteMessages = () => {
-        if (messagesId.length > 0) {
-            deleteMessages({ messagesId });
+        if (checkedMessagesId.length > 0) {
+            deleteMessages({ messagesId: checkedMessagesId });
         }
     };
 
     const handleMarkReadMessage = () => {
-        if (isOutgoing) {
-            return;
-        }
-        if (messagesId.length > 0) {
-            markMessages({ messagesId });
+        if (checkedMessagesId.length > 0) {
+            markMessages({ messagesId: checkedMessagesId });
         }
     };
 
@@ -63,6 +60,8 @@ const useActionsButtonLogic = () => {
         handleMoveToFolder,
         handleMarkReadMessage,
         folders,
+        checkedMessagesId,
+        isOutgoing,
     };
 };
 

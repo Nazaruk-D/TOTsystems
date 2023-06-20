@@ -22,13 +22,22 @@ import {
 import useActionsButtonLogic from '../../../../../hooks/useActionsButtonLogic';
 
 const ActionButton = () => {
-    const { handleDeleteMessages, handleMoveToFolder, handleMarkReadMessage, folders } = useActionsButtonLogic();
+    const { handleDeleteMessages, handleMoveToFolder, handleMarkReadMessage, folders, checkedMessagesId, isOutgoing } =
+        useActionsButtonLogic();
 
     return (
         <Grid item md={8.5}>
-            <DeleteActionButton handleDeleteMessages={handleDeleteMessages} />
-            <MoveActionButton handleMoveToFolder={handleMoveToFolder} folders={folders} />
-            <MarkReadActionButton handleMarkReadMessage={handleMarkReadMessage} />
+            {checkedMessagesId.length > 0 && (
+                <>
+                    <DeleteActionButton handleDeleteMessages={handleDeleteMessages} />
+                    {!isOutgoing && (
+                        <>
+                            <MoveActionButton handleMoveToFolder={handleMoveToFolder} folders={folders} />
+                            <MarkReadActionButton handleMarkReadMessage={handleMarkReadMessage} />
+                        </>
+                    )}
+                </>
+            )}
         </Grid>
     );
 };
