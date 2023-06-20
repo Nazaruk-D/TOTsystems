@@ -16,12 +16,12 @@ const useActionsButtonLogic = () => {
     const userFolders = useAppSelector(userFoldersSelector);
     const incomingIdCheckedMessages = useAppSelector(incomingCheckedIdMessagesSelector);
     const outgoingIdCheckedMessages = useAppSelector(outgoingCheckedIdMessagesSelector);
-    const isActiveFolder = useAppSelector(selectorIsActiveFolder);
+    const activeFolder = useAppSelector(selectorIsActiveFolder);
     const folders = userFolders ? [...mainFolders, ...userFolders] : mainFolders;
     const [changeMessagesFolder, { error }] = useChangeMessagesFolderMutation();
     const [deleteMessages] = useDeleteMessageMutation();
     const [markMessages] = useMarkReadMessagesMutation();
-    const isOutgoing = isActiveFolder === FoldersEnum.Outgoing;
+    const isOutgoing = activeFolder === FoldersEnum.Outgoing;
     const checkedMessagesId = [...incomingIdCheckedMessages, ...outgoingIdCheckedMessages];
 
     const handleMoveToFolder = async (folder: string) => {
@@ -29,14 +29,18 @@ const useActionsButtonLogic = () => {
             dispatch(setAppErrorAC('Нельзя переместить письма в папку "Отправленные"'));
             return;
         }
-        if (incomingIdCheckedMessages.length > 0 && !isOutgoing) {
+        if (incomingIdCheckedMessages.length > 0) {
             await changeMessagesFolder({ folder, messagesId: incomingIdCheckedMessages });
         }
     };
 
     const handleDeleteMessages = () => {
         if (checkedMessagesId.length > 0) {
-            deleteMessages({ messagesId: checkedMessagesId });
+            if (activeFolder === FoldersEnum.Remote || activeFolder === FoldersEnum.Outgoing) {
+                deleteMessages({ messagesId: checkedMessagesId });
+            } else {
+                handleMoveToFolder(FoldersEnum.Remote);
+            }
         }
     };
 
