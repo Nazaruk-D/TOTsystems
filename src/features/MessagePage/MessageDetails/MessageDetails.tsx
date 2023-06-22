@@ -40,10 +40,10 @@ const MessageDetails = () => {
                     {subject}
                 </Typography>
                 <Typography variant="subtitle1" color="textSecondary" sx={{ marginBottom: '0.5rem' }}>
-                    Кому: {sender.name} ({sender.email})
+                    Кому: {recipient.name} ({recipient.email})
                 </Typography>
                 <Typography variant="subtitle1" color="textSecondary" sx={{ marginBottom: '0.5rem' }}>
-                    От: {recipient.name} ({recipient.email})
+                    От: {sender.name} ({sender.email})
                 </Typography>
                 <Typography variant="subtitle2" color="textSecondary" sx={{ marginBottom: '1rem' }}>
                     Отправлено: {dateFormat(createdAt)}
